@@ -2,6 +2,6 @@ package entity;
 
 public class AdoptionForm {
 
-    private User user;
+    private int userNo;
 
 }
