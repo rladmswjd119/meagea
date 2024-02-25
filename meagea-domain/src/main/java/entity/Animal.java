@@ -1,8 +1,10 @@
 package entity;
 
+import jakarta.persistence.Entity;
 import lombok.Getter;
 
 @Getter
+@Entity
 public class Animal {
     public Animal(String name, int age, double weight, boolean neuter, String kind, String detail,
                   String place, int healthState, int activity, int sociality, int friendly) {

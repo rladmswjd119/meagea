@@ -1,4 +1,4 @@
-package project.api;
+package project.unit;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -11,6 +11,7 @@ public class AnimalFileManager {
 
     public String serverFile(MultipartFile multi) throws IOException {
         String serverFileName = createServerFileName(multi.getOriginalFilename());
+        // DIR_NAME 경로에 serverFileName으로 저장
         multi.transferTo(new File(getFullPath(serverFileName)));
         
         return serverFileName;

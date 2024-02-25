@@ -1,8 +1,10 @@
 package entity;
 
+import jakarta.persistence.Entity;
 import lombok.Getter;
 
 @Getter
+@Entity
 public class AnimalFile {
 
     public AnimalFile(String uploadFileName, String serverFileName) {

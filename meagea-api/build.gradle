@@ -19,8 +19,11 @@ dependencies {
     implementation project(':meagea-domain')
     implementation 'org.springframework.boot:spring-boot-starter-web'	// 웹 개발과 관련된 모든 의존성
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
+//    runtimeOnly 'mysql:mysql-connector-java'
 
     testImplementation platform('org.junit:junit-bom:5.9.1')
     testImplementation 'org.junit.jupiter:junit-jupiter'

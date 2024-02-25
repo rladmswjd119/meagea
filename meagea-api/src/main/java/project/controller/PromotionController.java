@@ -5,7 +5,8 @@ import entity.AnimalFile;
 import entity.Promotion;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import project.api.AnimalFileManager;
+import project.service.PromotionService;
+import project.unit.AnimalFileManager;
 import project.dto.PromotionForm;
 import project.dto.SimplePromotionDto;
 
@@ -16,6 +17,13 @@ import java.util.List;
 @RestController
 @RequestMapping("/meagea")
 public class PromotionController {
+
+    private PromotionService proService;
+
+    public PromotionController(PromotionService proService) {
+        this.proService = proService;
+    }
+
     @PostMapping("/promotion")
     public Promotion writePromotion(@ModelAttribute PromotionForm form) throws IOException {
         List<Integer> fileNoList = new ArrayList<>();
@@ -29,13 +37,13 @@ public class PromotionController {
                                    form.getDetail(), form.getPlace(), form.getHealthState(), form.getActivity(),
                                    form.getSociality(),form.getFriendly());
 
-        return new Promotion(10, form.getTitle(), animal.getNo(), form.getIntroduction(),
+        return new Promotion(form.getTitle(), animal.getNo(), form.getIntroduction(),
                                         form.getCondition(), fileNoList);
     }
 
     @GetMapping("/promotion/{no}")
     public Promotion getPromotion(@PathVariable int no){
-        return new Promotion(no,"제목", 1, "설명", "입양조건", new ArrayList<>());
+        return new Promotion("제목", 1, "설명", "입양조건", new ArrayList<>());
     }
 
     @GetMapping("/all-promotion-title")
