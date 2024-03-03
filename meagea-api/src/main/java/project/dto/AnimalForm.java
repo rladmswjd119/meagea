@@ -1,18 +1,14 @@
-package entity;
+package project.dto;
 
-import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
-@Entity
-@Table(name = "animal")
-@NoArgsConstructor
-public class Animal {
-    public Animal(String name, int age, String gender, double weight, boolean neuter, String kind,
-                  String place, int healthState, int activity, int sociality, int friendly) {
-        this.no = (int)(Math.random()*10000);
+@Setter
+public class AnimalForm {
+    public AnimalForm(String name, int age, String gender, double weight, boolean neuter, String kind, String place,
+                      int healthState, int activity, int sociality, int friendly) {
         this.name = name;
         this.age = age;
         this.gender = gender;
@@ -27,8 +23,6 @@ public class Animal {
         this.adoptionState = false;
     }
 
-    @Id
-    private int no;
     private String name;
     private int age;
     private String gender;

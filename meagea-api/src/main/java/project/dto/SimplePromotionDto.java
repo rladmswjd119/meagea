@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter
-@Setter
 public class SimplePromotionDto {
     public SimplePromotionDto(int no, int animalNo, String title, String name, String gender, int age, String kind) {
         this.no = no;

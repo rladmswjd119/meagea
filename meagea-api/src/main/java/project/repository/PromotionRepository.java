@@ -1,18 +1,13 @@
 package project.repository;
 
+import entity.Animal;
 import entity.Promotion;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
-public class PromotionRepository {
-
-    @PersistenceContext
-    private EntityManager em;
-
-    public void addPromotion(Promotion promotion) {
-        em.persist(promotion);
-    }
-
-}
+public interface PromotionRepository extends JpaRepository<Promotion, Integer> {}
