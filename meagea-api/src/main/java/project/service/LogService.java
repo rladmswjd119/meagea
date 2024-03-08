@@ -39,7 +39,7 @@ public class LogService {
         List<Log> logList = logRepo.findAllByPromotionNo(promotionNo);
         for(Log log : logList) {
             List<AnimalFile> animalFileList = fileRepo.findAllByLogNo(log.getNo());
-            LogTatalDto dto = new LogTatalDto(log, animalFileList);
+            LogTatalDto dto = new LogTatalDto(log.getPromotionNo(), log.getBody(), log.getMakeDate(), animalFileList);
             dtoList.add(dto);
         }
 

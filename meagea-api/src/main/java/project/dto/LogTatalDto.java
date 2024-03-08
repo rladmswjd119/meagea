@@ -5,11 +5,14 @@ import entity.Log;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
 @AllArgsConstructor
 public class LogTatalDto {
-    private Log log;
+    private int promotionNo;
+    private String body;
+    private LocalDateTime makeDate;
     private List<AnimalFile> imageList;
 }

@@ -42,7 +42,7 @@ public class LogControllerTest {
                     new ParameterizedTypeReference<List<LogTatalDto>>() {}).getBody();
 
         for(LogTatalDto dto : dtoList) {
-            assertEquals(dto.getLog().getBody(), "로그 내용");
+            assertEquals(dto.getBody(), "로그 내용");
         }
     }
 
