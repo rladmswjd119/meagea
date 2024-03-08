@@ -24,6 +24,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -51,11 +52,12 @@ public class PromotionServiceTest {
                                     "동네", 2, 1, 2, 1);
         given(animalRepo.findById(anyInt())).willReturn(Optional.of(animal));
         List<MultipartFile> list = new ArrayList<>();
-        for (int i = 0; i < 4; i++) {
-            File file = new File("src\\main\\java\\project\\image\\" + "file" + i + ".jpg");
-            MockMultipartFile mul = new MockMultipartFile("file" + i, new FileInputStream(file));
-            list.add(mul);
-        }
+//        for (int i = 0; i < 4; i++) {
+//            File file = new File("/Users/gim-eunjeong/IdeaProjects/meagea/meagea-api/src/main/java/project/image/"
+//                    + "file" + i + ".jpg");
+//            MockMultipartFile mul = new MockMultipartFile("file" + i, new FileInputStream(file));
+//            list.add(mul);
+//        }
         PromotionForm form = new PromotionForm("제목", list, animal.getNo(), "내용", "내용2");
         Promotion pro = new Promotion("제목", 5, "내용", "내용2");
         given(proRepo.save(proCaptor.capture())).willReturn(pro);
@@ -64,21 +66,15 @@ public class PromotionServiceTest {
         Promotion cap = proCaptor.getValue();
 
         verify(proRepo).save(proCaptor.capture());
-        verify(animalRepo, times(2)).findById(anyInt());
-        verify(fileRepo, times(4)).save(any());
+        verify(animalRepo, times(1)).findById(anyInt());
         assertThat(form.getTitle()).isEqualTo(cap.getTitle());
     }
 
     @Test
     public void savePromotionFailTest() throws IOException {
         List<MultipartFile> list = new ArrayList<>();
-        for (int i = 0; i < 4; i++) {
-            File file = new File("src\\main\\java\\project\\image\\" + "file" + i + ".jpg");
-            MockMultipartFile mul = new MockMultipartFile("file" + i, new FileInputStream(file));
-            list.add(mul);
-        }
         PromotionForm form = new PromotionForm("제목", list, 5, "내용", "내용2");
-        Throwable ex = Assertions.assertThrows(Exception.class, () -> service.savePromotion(form));
+        Throwable ex = Assertions.assertThrows(NullPointerException.class, () -> service.savePromotion(form));
 
         assertThat(ex.getMessage()).isEqualTo("조회 결과 없음");
     }
@@ -100,13 +96,10 @@ public class PromotionServiceTest {
     }
 
     @Test
-    public void findAllSimpleSuccessTest() {
+    public void findAllPromotionSuccessTest() {
         List<Promotion> proList = new ArrayList<>();
-        Animal animal = new Animal("머핀", 5, "암컷", 3.5, true, "친칠라", "잡종",
-                "동네", 2, 1, 2, 1);
         for(int i = 0; i < 4; i++) {
             proList.add(new Promotion("제목", i, "내용", "내용2"));
-            given(animalRepo.findById(eq(i))).willReturn(Optional.of(animal));
         }
         given(proRepo.findAll()).willReturn(proList);
 
@@ -118,7 +111,7 @@ public class PromotionServiceTest {
     }
 
     @Test
-    public void findAllSimpleFailTest() {
+    public void findAllPromotionFailTest() {
         List<Promotion> proList = new ArrayList<>();
         for(int i = 0; i < 4; i++) {
             proList.add(new Promotion("제목", i, "내용", "내용2"));
@@ -132,7 +125,8 @@ public class PromotionServiceTest {
     public void updatePromotionSuccessTest() throws IOException {
         List<MultipartFile> list = new ArrayList<>();
         for (int i = 0; i < 4; i++) {
-            File file = new File("src\\main\\java\\project\\image\\" + "file" + i + ".jpg");
+            File file = new File("/Users/gim-eunjeong/IdeaProjects/meagea/meagea-api/src/main/java/project/image/"
+                    + "file" + i + ".jpg");
             MockMultipartFile mul = new MockMultipartFile("file" + i, new FileInputStream(file));
             list.add(mul);
         }
@@ -150,13 +144,14 @@ public class PromotionServiceTest {
     public void updatePromotionFailTest() throws IOException {
         List<MultipartFile> list = new ArrayList<>();
         for (int i = 0; i < 4; i++) {
-            File file = new File("src\\main\\java\\project\\image\\" + "file" + i + ".jpg");
+            File file = new File("/Users/gim-eunjeong/IdeaProjects/meagea/meagea-api/src/main/java/project/image/"
+                    + "file" + i + ".jpg");
             MockMultipartFile mul = new MockMultipartFile("file" + i, new FileInputStream(file));
             list.add(mul);
         }
         PromotionModifyForm dto = new PromotionModifyForm(1, "수정된 제목", list, "수정된 설명", "수정된 조건");
 
         Throwable ex = Assertions.assertThrows(NullPointerException.class, () -> service.updatePromotion(dto));
-        assertThat(ex.getMessage()).isEqualTo("수정 가능한 Promotion 객체가 존재하지 않습니다.");
+        assertThat(ex.getMessage()).isEqualTo("수정 가능한 Promotion 데이터가 존재하지 않습니다.");
     }
 }

@@ -1,5 +1,6 @@
 package project.service;
 
+import entity.Animal;
 import entity.AnimalFile;
 import entity.Log;
 import entity.Promotion;
@@ -18,6 +19,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -30,10 +32,11 @@ public class PromotionService {
     private final LogRepository logRepo;
 
     public Promotion savePromotion(PromotionForm form) {
-        if(animalRepo.findById(form.getAnimalNo()).isEmpty()) {
+        Optional<Animal> animal = animalRepo.findById(form.getAnimalNo());
+        if(animal.isEmpty()) {
             throw new NullPointerException("조회 결과 없음");
         }
-        return proRepo.save(new Promotion(form.getTitle(), form.getAnimalNo(), form.getIntroduction(), form.getCondition()));
+        return proRepo.save(new Promotion(form.getTitle(), animal.get().getNo(), form.getIntroduction(), form.getCondition()));
     }
 
     public List<AnimalFile> saveAnimalFile(int proNo, List<MultipartFile> imageList) throws IOException {
