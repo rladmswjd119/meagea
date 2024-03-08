@@ -1,16 +1,13 @@
 package project.service;
 
-import entity.Animal;
 import entity.AnimalFile;
 import entity.Log;
 import entity.Promotion;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import project.dto.PromotionDetailDto;
 import project.dto.PromotionForm;
-import project.dto.PromotionModifyDto;
-import project.dto.SimplePromotionDto;
+import project.dto.PromotionModifyForm;
 import project.repository.AnimalFileRepository;
 import project.repository.AnimalRepository;
 import project.repository.LogRepository;
@@ -32,56 +29,49 @@ public class PromotionService {
     private final AnimalFileRepository fileRepo;
     private final LogRepository logRepo;
 
-    public PromotionDetailDto savePromotion(PromotionForm form) throws IOException {
+    public Promotion savePromotion(PromotionForm form) {
         if(animalRepo.findById(form.getAnimalNo()).isEmpty()) {
             throw new NullPointerException("조회 결과 없음");
         }
-        Animal animal = animalRepo.findById(form.getAnimalNo()).get();
-        Promotion pro = proRepo.save(new Promotion(form.getTitle(), animal.getNo(), form.getIntroduction(), form.getCondition()));
-        AnimalFileManager fileMan = new AnimalFileManager();
-        List<AnimalFile> imageList = new ArrayList<>();
-        for(MultipartFile m : form.getImageList()) {
-            AnimalFile animalFile = new AnimalFile(pro.getNo(), m.getOriginalFilename(), fileMan.serverFile(m), "promotion");
-            fileRepo.save(animalFile);
-            imageList.add(animalFile);
-        }
-
-        return new PromotionDetailDto(pro, animal, imageList);
+        return proRepo.save(new Promotion(form.getTitle(), form.getAnimalNo(), form.getIntroduction(), form.getCondition()));
     }
 
-    public PromotionDetailDto findByNo(int no) {
+    public List<AnimalFile> saveAnimalFile(int proNo, List<MultipartFile> imageList) throws IOException {
+        AnimalFileManager fileMan = new AnimalFileManager();
+        List<AnimalFile> animalFileList = new ArrayList<>();
+        try {
+            for(MultipartFile m : imageList) {
+                AnimalFile animalFile = new AnimalFile(proNo, m.getOriginalFilename(), fileMan.serverFile(m), "promotion");
+                fileRepo.save(animalFile);
+                animalFileList.add(animalFile);
+            }
+        } catch (IOException ex){
+            proRepo.deleteById(proNo);
+            throw new IOException("홍보글 생성이 취소되었습니다.");
+        }
+        return animalFileList;
+    }
+
+    public Promotion findPromotionByNo(int no) {
         if(proRepo.findById(no).isEmpty()){
             throw new NullPointerException("조회 결과 없음");
         }
-        Promotion pro = proRepo.findById(no).get();
-        Optional<Animal> animal = animalRepo.findById(pro.getAnimalNo());
-        List<AnimalFile> imageList = fileRepo.findAllByPromotionNo(pro.getNo());
-
-        return new PromotionDetailDto(pro, animal.get(), imageList);
+        return proRepo.findById(no).get();
     }
 
-    public List<SimplePromotionDto> findAllSimple() {
+    public List<Promotion> findAllPromotion() {
         List<Promotion> proList = proRepo.findAll();
         if(proList.isEmpty()) {
             throw new NullPointerException("조회 결과 없음");
         }
-        
-        List<SimplePromotionDto> dtoList = new ArrayList<>();
-        for(Promotion pro : proList){
-            Optional<Animal> optAnimal = animalRepo.findById(pro.getAnimalNo());
-            Animal animal = optAnimal.get();
-            SimplePromotionDto dto = new SimplePromotionDto(pro.getNo(), animal.getNo(), pro.getTitle(), animal.getName(),
-                                                            animal.getGender(), animal.getAge(), animal.getKind());
-            dtoList.add(dto);
-        }
 
-        return dtoList;
+        return proList;
     }
 
-    public PromotionDetailDto updatePromotion(PromotionModifyDto modifyDto) {
+    public Promotion updatePromotion(PromotionModifyForm modifyDto) {
         Optional<Promotion> optPro = proRepo.findById(modifyDto.getNo());
         if(optPro.isEmpty()) {
-            throw new NullPointerException("수정 가능한 Promotion 객체가 존재하지 않습니다.");
+            throw new NullPointerException("수정 가능한 Promotion 데이터가 존재하지 않습니다.");
         }
         Promotion pro = optPro.get();
         pro.setTitle(modifyDto.getTitle());
@@ -90,21 +80,30 @@ public class PromotionService {
         pro.setModifyDate(LocalDateTime.now());
         proRepo.save(pro);
 
-        Animal animal = animalRepo.findById(pro.getAnimalNo()).get();
-        List<AnimalFile> imageList = fileRepo.findAllByPromotionNo(pro.getNo());
-
-        return new PromotionDetailDto(pro, animal, imageList);
+        return pro;
     }
 
-    public void deletePromotion(int no) {
-        List<AnimalFile> imageList = fileRepo.findAllByPromotionNo(no);
-        fileRepo.deleteAll(imageList);
-
-        List<Log> logList = logRepo.findAllByPromotionNo(no);
-        if(!logList.isEmpty()){
-            logRepo.deleteAll(logList);
+    public Promotion deletePromotion(int no, List<Log> deleteLogList, List<AnimalFile> deleteAnimalFileList) {
+        Promotion pro = proRepo.findById(no).get();
+        try {
+            proRepo.deleteById(no);
+        } catch (Exception ex){
+            logRepo.saveAll(deleteLogList);
+            fileRepo.saveAll(deleteAnimalFileList);
+            throw new RuntimeException("홍보글 삭제가 취소되었습니다.");
         }
 
-        proRepo.deleteById(no);
+        return pro;
+    }
+
+    public List<AnimalFile> findAllAnimalFIleByPromotionNo(int no) {
+        return fileRepo.findAllByPromotionNo(no);
+    }
+
+    public List<AnimalFile> deleteAnimalFIleListByPromotionNo(int no) {
+        List<AnimalFile> deleteAnimalFileList = fileRepo.findAllByPromotionNo(no);
+        fileRepo.deleteAll(deleteAnimalFileList);
+
+        return deleteAnimalFileList;
     }
 }

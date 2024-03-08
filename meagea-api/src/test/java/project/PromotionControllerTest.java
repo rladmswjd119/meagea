@@ -44,8 +44,7 @@ public class PromotionControllerTest {
         ResponseEntity<PromotionDetailDto> responseEntity = testRestTemplate.postForEntity(url, map, PromotionDetailDto.class);
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         PromotionDetailDto detailDto = responseEntity.getBody();
-        Promotion pro = detailDto.getPromotion();
-        assertThat(pro.getIntroduction()).isEqualTo("귀여움");
+        assertThat(detailDto.getIntroduction()).isEqualTo("귀여움");
     }
 
 
@@ -54,8 +53,7 @@ public class PromotionControllerTest {
         String url = "/meagea/promotion/" + 9280;
         ResponseEntity<PromotionDetailDto> responseEntity = testRestTemplate.getForEntity(url, PromotionDetailDto.class);
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
-        Promotion pro = responseEntity.getBody().getPromotion();
-        assertThat(pro.getTitle()).isEqualTo("제목");
+        assertThat(responseEntity.getBody().getTitle()).isEqualTo("제목");
     }
 
     @Test
@@ -89,8 +87,7 @@ public class PromotionControllerTest {
         HttpEntity<MultiValueMap<String, Object>> entityMap = new HttpEntity<>(map);
 
         ResponseEntity<PromotionDetailDto> modifyPro = testRestTemplate.exchange(url, HttpMethod.PATCH, entityMap, PromotionDetailDto.class);
-        Promotion pro = modifyPro.getBody().getPromotion();
-        assertThat(pro.getTitle()).isEqualTo("수정된 제목");
+        assertThat(modifyPro.getBody().getTitle()).isEqualTo("수정된 제목");
     }
 
     @Test

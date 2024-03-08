@@ -13,8 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 import project.dto.PromotionForm;
-import project.dto.PromotionModifyDto;
-import project.dto.SimplePromotionDto;
+import project.dto.PromotionModifyForm;
 import project.repository.AnimalFileRepository;
 import project.repository.AnimalRepository;
 import project.repository.PromotionRepository;
@@ -89,13 +88,13 @@ public class PromotionServiceTest {
         Promotion pro = new Promotion("제목", 5, "내용", "내용2");
         given(proRepo.findById(eq(10))).willReturn(Optional.of(pro));
 
-        int result = service.findByNo(10).getAnimal().getNo();
+        int result = service.findPromotionByNo(10).getAnimalNo();
         assertThat(result).isEqualTo(5);
     }
 
     @Test
     public void findByNoFailTest() throws NullPointerException {
-        Throwable ex = Assertions.assertThrows(Exception.class, () -> service.findByNo(10));
+        Throwable ex = Assertions.assertThrows(Exception.class, () -> service.findPromotionByNo(10));
 
         assertThat(ex.getMessage()).isEqualTo("조회 결과 없음");
     }
@@ -111,10 +110,10 @@ public class PromotionServiceTest {
         }
         given(proRepo.findAll()).willReturn(proList);
 
-        List<SimplePromotionDto> result = service.findAllSimple();
+        List<Promotion> result = service.findAllPromotion();
 
-        for(SimplePromotionDto dto : result) {
-            assertThat(dto.getTitle()).isEqualTo("제목");
+        for(Promotion pro : result) {
+            assertThat(pro.getTitle()).isEqualTo("제목");
         }
     }
 
@@ -125,7 +124,7 @@ public class PromotionServiceTest {
             proList.add(new Promotion("제목", i, "내용", "내용2"));
         }
 
-        Throwable ex = Assertions.assertThrows(NullPointerException.class, () -> service.findAllSimple());
+        Throwable ex = Assertions.assertThrows(NullPointerException.class, () -> service.findAllPromotion());
         assertThat(ex.getMessage()).isEqualTo("조회 결과 없음");
     }
 
@@ -137,11 +136,11 @@ public class PromotionServiceTest {
             MockMultipartFile mul = new MockMultipartFile("file" + i, new FileInputStream(file));
             list.add(mul);
         }
-        PromotionModifyDto dto = new PromotionModifyDto(1, "수정된 제목", list, "수정된 설명", "수정된 조건");
+        PromotionModifyForm dto = new PromotionModifyForm(1, "수정된 제목", list, "수정된 설명", "수정된 조건");
         Promotion pro = new Promotion("제목", 5, "내용", "내용2");
         given(proRepo.findById(dto.getNo())).willReturn(Optional.of(pro));
 
-        Promotion result = service.updatePromotion(dto).getPromotion();
+        Promotion result = service.updatePromotion(dto);
 
         verify(proRepo, times(1)).findById(1);
         assertThat(result.getTitle()).isEqualTo(dto.getTitle());
@@ -155,7 +154,7 @@ public class PromotionServiceTest {
             MockMultipartFile mul = new MockMultipartFile("file" + i, new FileInputStream(file));
             list.add(mul);
         }
-        PromotionModifyDto dto = new PromotionModifyDto(1, "수정된 제목", list, "수정된 설명", "수정된 조건");
+        PromotionModifyForm dto = new PromotionModifyForm(1, "수정된 제목", list, "수정된 설명", "수정된 조건");
 
         Throwable ex = Assertions.assertThrows(NullPointerException.class, () -> service.updatePromotion(dto));
         assertThat(ex.getMessage()).isEqualTo("수정 가능한 Promotion 객체가 존재하지 않습니다.");

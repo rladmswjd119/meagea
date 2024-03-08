@@ -45,4 +45,17 @@ public class LogService {
 
         return dtoList;
     }
+
+    public List<Log> deletAllLogByPromotionNo(int no, List<AnimalFile> deleteAnimalFileList) {
+        List<Log> logList = logRepo.findAllByPromotionNo(no);
+        try {
+            if(!logList.isEmpty()){
+                logRepo.deleteAll(logList);
+            }
+        } catch (Exception ex) {
+            fileRepo.saveAll(deleteAnimalFileList);
+            throw new RuntimeException("홍보글 삭제가 취소되었습니다.");
+        }
+        return logList;
+    }
 }

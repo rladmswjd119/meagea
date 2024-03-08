@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter
-@Setter
 public class AnimalForm {
     public AnimalForm(String name, int age, String gender, double weight, boolean neuter, String kind, String detail, String place,
                       int healthState, int activity, int sociality, int friendly) {
