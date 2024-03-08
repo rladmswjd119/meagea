@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class AnimalForm {
-    public AnimalForm(String name, int age, String gender, double weight, boolean neuter, String kind, String place,
+    public AnimalForm(String name, int age, String gender, double weight, boolean neuter, String kind, String detail, String place,
                       int healthState, int activity, int sociality, int friendly) {
         this.name = name;
         this.age = age;
@@ -15,6 +15,7 @@ public class AnimalForm {
         this.weight = weight;
         this.neuter = neuter;
         this.kind = kind;
+        this.detail = detail;
         this.place = place;
         this.healthState = healthState;
         this.activity = activity;

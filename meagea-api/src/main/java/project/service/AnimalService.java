@@ -14,14 +14,14 @@ public class AnimalService {
 
     public Animal addAnimal(AnimalForm form){
         Animal animal = new Animal(form.getName(), form.getAge(), form.getGender(), form.getWeight(),
-                                    form.isNeuter(), form.getKind(), form.getPlace(), form.getHealthState(),
+                                    form.isNeuter(), form.getKind(), form.getDetail(),form.getPlace(), form.getHealthState(),
                                     form.getActivity(), form.getSociality(), form.getFriendly());
         return animalRepo.save(animal);
     }
 
     public Animal findAnimalByNo(int no){
         if(animalRepo.findById(no).isEmpty()){
-            System.out.println("조회 결과 없음");
+            throw new NullPointerException("조회 결과 없음");
         }
 
         return animalRepo.findById(no).get();

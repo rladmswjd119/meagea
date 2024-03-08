@@ -21,7 +21,7 @@ public class AnimalFile {
     @Id
     private int no;
     private int promotionNo;
-    private Integer diaryLogNo;
+    private Integer logNo;
     private String uploadFileName;
     private String serverFileName;
     private String property;

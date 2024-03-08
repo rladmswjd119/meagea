@@ -20,6 +20,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'	// 웹 개발과 관련된 모든 의존성
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation group: 'org.apache.httpcomponents.client5', name: 'httpclient5', version: '5.3.1'
+    implementation 'org.apache.httpcomponents:httpclient:4.5.13'
     runtimeOnly 'com.mysql:mysql-connector-j'
 
     testImplementation platform('org.junit:junit-bom:5.9.1')
