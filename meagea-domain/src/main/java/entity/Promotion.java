@@ -25,6 +25,7 @@ public class Promotion {
         this.terms = terms;
         this.makeDate = LocalDateTime.now();
         this.modifyDate = LocalDateTime.now();
+        this.remove = 0;
     }
 
     @Id
@@ -35,4 +36,5 @@ public class Promotion {
     private String terms;
     private LocalDateTime makeDate;
     private LocalDateTime modifyDate;
+    private int remove;
 }

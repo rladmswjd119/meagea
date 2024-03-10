@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
+@Setter
 @Entity
 @Table(name = "animal")
 @NoArgsConstructor
@@ -26,6 +27,7 @@ public class Animal {
         this.sociality = sociality;
         this.friendly = friendly;
         this.adoptionState = false;
+        this.remove = 0;
     }
 
     @Id
@@ -43,4 +45,5 @@ public class Animal {
     private int sociality;
     private int friendly;
     private boolean adoptionState;
+    private int remove;
 }

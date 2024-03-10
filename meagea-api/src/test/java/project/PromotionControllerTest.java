@@ -30,12 +30,13 @@ public class PromotionControllerTest {
     public void 입양_홍보글_생성() throws IOException {
         MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
         map.add("title", "제목");
-        map.add("animalNo", 8113);
+        map.add("animalNo", 4242);
         map.add("introduction", "귀여움");
         map.add("condition", "집 좋아하시는 분");
         for(int i = 0; i < 4; i++) {
             // path 경로에 있는 name.type 파일을 File 객체로 생성
-            File file = new File("src\\main\\java\\project\\image\\" + "file" + i + ".jpg");
+            File file = new File("/Users/gim-eunjeong/IdeaProjects/meagea/meagea-api/src/main/java/project/image/"
+                    + "file" + i + ".jpg");
             FileSystemResource resource = new FileSystemResource(file);
             map.add("imageList", resource);
         }
@@ -50,7 +51,7 @@ public class PromotionControllerTest {
 
     @Test
     public void 입양_홍보글_특정_조회(){
-        String url = "/meagea/promotion/" + 9280;
+        String url = "/meagea/promotion/" + 2858;
         ResponseEntity<PromotionDetailDto> responseEntity = testRestTemplate.getForEntity(url, PromotionDetailDto.class);
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(responseEntity.getBody().getTitle()).isEqualTo("제목");
@@ -74,11 +75,11 @@ public class PromotionControllerTest {
 
         String url = "/meagea/promotion";
         MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
-        map.add("no", 4083);
+        map.add("no", 2858);
         map.add("title", "수정된 제목");
         for(int i = 0; i < 4; i++) {
-            // path 경로에 있는 name.type 파일을 File 객체로 생성
-            File file = new File("src\\main\\java\\project\\image\\" + "file" + i + ".jpg");
+            File file = new File("/Users/gim-eunjeong/IdeaProjects/meagea/meagea-api/src/main/java/project/image/"
+                    + "file" + i + ".jpg");
             FileSystemResource resource = new FileSystemResource(file);
             map.add("imageList", resource);
         }
@@ -92,7 +93,7 @@ public class PromotionControllerTest {
 
     @Test
     public void 홍보글_삭제_테스트(){
-        String url = "/meagea/promotion/" + 3062;
+        String url = "/meagea/promotion/" + 2858;
         testRestTemplate.delete(url);
     }
 }

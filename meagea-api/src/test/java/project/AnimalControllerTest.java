@@ -42,7 +42,7 @@ public class AnimalControllerTest {
 
     @Test
     public void 유기동물_조회_테스트(){
-        String url = "/meagea/animal/" + 8113;
+        String url = "/meagea/animal/" + 7732;
         AnimalDto animal = testRestTemplate.getForEntity(url, AnimalDto.class).getBody();
 
         assertThat(animal.getName()).isEqualTo("머핀");

@@ -36,7 +36,7 @@ public class LogService {
 
     public List<LogTatalDto> getAllLogByPromotionNo(int promotionNo) {
         List<LogTatalDto> dtoList = new ArrayList<>();
-        List<Log> logList = logRepo.findAllByPromotionNo(promotionNo);
+        List<Log> logList = logRepo.findAllByPromotionNoAndRemove(promotionNo, 0);
         for(Log log : logList) {
             List<AnimalFile> animalFileList = fileRepo.findAllByLogNo(log.getNo());
             LogTatalDto dto = new LogTatalDto(log.getPromotionNo(), log.getBody(), log.getMakeDate(), animalFileList);
@@ -46,14 +46,17 @@ public class LogService {
         return dtoList;
     }
 
-    public List<Log> deletAllLogByPromotionNo(int no, List<AnimalFile> deleteAnimalFileList) {
-        List<Log> logList = logRepo.findAllByPromotionNo(no);
+    public List<Log> deletAllLogByPromotionNo(int promotionNo) {
+        List<Log> logList = logRepo.findAllByPromotionNoAndRemove(promotionNo, 0);
         try {
             if(!logList.isEmpty()){
-                logRepo.deleteAll(logList);
+                logList.forEach(log -> log.setRemove(1));
+                logRepo.saveAll(logList);
             }
         } catch (Exception ex) {
-            fileRepo.saveAll(deleteAnimalFileList);
+            List<AnimalFile> animalFileList = fileRepo.findAllByPromotionNo(promotionNo);
+            animalFileList.forEach(file -> file.setRemove(0));
+            fileRepo.saveAll(animalFileList);
             throw new RuntimeException("홍보글 삭제가 취소되었습니다.");
         }
         return logList;

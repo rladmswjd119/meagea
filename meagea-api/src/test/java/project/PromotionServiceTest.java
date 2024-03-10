@@ -52,12 +52,6 @@ public class PromotionServiceTest {
                                     "동네", 2, 1, 2, 1);
         given(animalRepo.findById(anyInt())).willReturn(Optional.of(animal));
         List<MultipartFile> list = new ArrayList<>();
-//        for (int i = 0; i < 4; i++) {
-//            File file = new File("/Users/gim-eunjeong/IdeaProjects/meagea/meagea-api/src/main/java/project/image/"
-//                    + "file" + i + ".jpg");
-//            MockMultipartFile mul = new MockMultipartFile("file" + i, new FileInputStream(file));
-//            list.add(mul);
-//        }
         PromotionForm form = new PromotionForm("제목", list, animal.getNo(), "내용", "내용2");
         Promotion pro = new Promotion("제목", 5, "내용", "내용2");
         given(proRepo.save(proCaptor.capture())).willReturn(pro);
@@ -71,7 +65,7 @@ public class PromotionServiceTest {
     }
 
     @Test
-    public void savePromotionFailTest() throws IOException {
+    public void savePromotionFailTest() {
         List<MultipartFile> list = new ArrayList<>();
         PromotionForm form = new PromotionForm("제목", list, 5, "내용", "내용2");
         Throwable ex = Assertions.assertThrows(NullPointerException.class, () -> service.savePromotion(form));
@@ -101,7 +95,7 @@ public class PromotionServiceTest {
         for(int i = 0; i < 4; i++) {
             proList.add(new Promotion("제목", i, "내용", "내용2"));
         }
-        given(proRepo.findAll()).willReturn(proList);
+        given(proRepo.findByRemove(0)).willReturn(proList);
 
         List<Promotion> result = service.findAllPromotion();
 

@@ -7,6 +7,8 @@ import project.dto.AnimalForm;
 import project.repository.AnimalFileRepository;
 import project.repository.AnimalRepository;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class AnimalService {
@@ -20,10 +22,11 @@ public class AnimalService {
     }
 
     public Animal findAnimalByNo(int no){
-        if(animalRepo.findById(no).isEmpty()){
+        Optional<Animal> animal = animalRepo.findById(no);
+        if(animal.isEmpty()){
             throw new NullPointerException("조회 결과 없음");
         }
 
-        return animalRepo.findById(no).get();
+        return animal.get();
     }
 }

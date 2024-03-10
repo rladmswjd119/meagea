@@ -56,14 +56,15 @@ public class PromotionService {
     }
 
     public Promotion findPromotionByNo(int no) {
-        if(proRepo.findById(no).isEmpty()){
+        Optional<Promotion> pro = proRepo.findById(no);
+        if(pro.isEmpty()){
             throw new NullPointerException("조회 결과 없음");
         }
-        return proRepo.findById(no).get();
+        return pro.get();
     }
 
     public List<Promotion> findAllPromotion() {
-        List<Promotion> proList = proRepo.findAll();
+        List<Promotion> proList = proRepo.findByRemove(0);
         if(proList.isEmpty()) {
             throw new NullPointerException("조회 결과 없음");
         }
@@ -86,13 +87,20 @@ public class PromotionService {
         return pro;
     }
 
-    public Promotion deletePromotion(int no, List<Log> deleteLogList, List<AnimalFile> deleteAnimalFileList) {
-        Promotion pro = proRepo.findById(no).get();
+    public Promotion deletePromotion(int promotionNo) {
+        Promotion pro = proRepo.findById(promotionNo).get();
         try {
-            proRepo.deleteById(no);
+            pro.setRemove(1);
+            proRepo.save(pro);
         } catch (Exception ex){
+            List<Log> deleteLogList = logRepo.findAllByPromotionNoAndRemove(promotionNo, 1);
+            deleteLogList.forEach(log -> log.setRemove(0));
             logRepo.saveAll(deleteLogList);
+
+            List<AnimalFile> deleteAnimalFileList = fileRepo.findAllByPromotionNo(promotionNo);
+            deleteAnimalFileList.forEach(file -> file.setRemove(0));
             fileRepo.saveAll(deleteAnimalFileList);
+
             throw new RuntimeException("홍보글 삭제가 취소되었습니다.");
         }
 
@@ -100,12 +108,13 @@ public class PromotionService {
     }
 
     public List<AnimalFile> findAllAnimalFIleByPromotionNo(int no) {
-        return fileRepo.findAllByPromotionNo(no);
+        return fileRepo.findAllByPromotionNoAndProperty(no, "promotion");
     }
 
-    public List<AnimalFile> deleteAnimalFIleListByPromotionNo(int no) {
-        List<AnimalFile> deleteAnimalFileList = fileRepo.findAllByPromotionNo(no);
-        fileRepo.deleteAll(deleteAnimalFileList);
+    public List<AnimalFile> deleteAnimalFIleListByPromotionNo(int promotionNo) {
+        List<AnimalFile> deleteAnimalFileList = fileRepo.findAllByPromotionNo(promotionNo);
+        deleteAnimalFileList.forEach(file -> file.setRemove(1));
+        fileRepo.saveAll(deleteAnimalFileList);
 
         return deleteAnimalFileList;
     }

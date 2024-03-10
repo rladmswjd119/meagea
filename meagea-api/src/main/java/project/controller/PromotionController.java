@@ -88,8 +88,8 @@ public class PromotionController {
     @DeleteMapping("/promotion/{no}")
     public PromotionDetailDto deletePromotion(@PathVariable int no) {
         List<AnimalFile> deleteAnimalFileList = proService.deleteAnimalFIleListByPromotionNo(no);
-        List<Log> deleteLogList = logService.deletAllLogByPromotionNo(no, deleteAnimalFileList);
-        Promotion deletePro = proService.deletePromotion(no, deleteLogList, deleteAnimalFileList);
+        logService.deletAllLogByPromotionNo(no);
+        Promotion deletePro = proService.deletePromotion(no);
         Animal animal = animalService.findAnimalByNo(deletePro.getAnimalNo());
 
         return new PromotionDetailDto(deletePro.getNo(), deletePro.getTitle(), deletePro.getAnimalNo(),
