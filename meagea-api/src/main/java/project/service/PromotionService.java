@@ -5,6 +5,8 @@ import entity.AnimalFile;
 import entity.Log;
 import entity.Promotion;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import project.dto.PromotionForm;
@@ -21,6 +23,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Future;
 
 @Service
 @RequiredArgsConstructor
@@ -39,10 +44,15 @@ public class PromotionService {
         return proRepo.save(new Promotion(form.getTitle(), animal.get().getNo(), form.getIntroduction(), form.getCondition()));
     }
 
-    public List<AnimalFile> saveAnimalFile(int proNo, List<MultipartFile> imageList) throws IOException {
+    @Async("fileThread")
+    public Future<List<AnimalFile>> saveAnimalFile(int proNo, List<MultipartFile> imageList) throws IOException {
         AnimalFileManager fileMan = new AnimalFileManager();
         List<AnimalFile> animalFileList = new ArrayList<>();
         try {
+            if(imageList.size() > 10) {
+                throw new IOException("이미지 파일은 최대 4개까지 첨부가 가능합니다.");
+            }
+
             for(MultipartFile m : imageList) {
                 AnimalFile animalFile = new AnimalFile(proNo, m.getOriginalFilename(), fileMan.serverFile(m), "promotion");
                 fileRepo.save(animalFile);
@@ -52,7 +62,7 @@ public class PromotionService {
             proRepo.deleteById(proNo);
             throw new IOException("홍보글 생성이 취소되었습니다.");
         }
-        return animalFileList;
+        return new AsyncResult<>(animalFileList);
     }
 
     public Promotion findPromotionByNo(int no) {
