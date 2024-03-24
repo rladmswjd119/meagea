@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
@@ -35,14 +36,15 @@ public class PromotionController {
     public PromotionDetailDto addPromotion(@ModelAttribute PromotionForm form) throws IOException, ExecutionException, InterruptedException {
         Promotion pro = proService.savePromotion(form);
         Animal animal = animalService.findAnimalByNo(form.getAnimalNo());
-        Future<List<AnimalFile>> future = proService.saveAnimalFile(pro.getNo(), form.getImageList());
+        proService.saveAnimalFile(pro.getNo(), form.getImageList());
+        List<AnimalFile> animalFileList = proService.findAllAnimalFIleByPromotionNo(pro.getNo());
 
         return new PromotionDetailDto(pro.getNo(), pro.getTitle(), pro.getAnimalNo(), pro.getIntroduction(),
                 pro.getTerms(), pro.getMakeDate(), pro.getModifyDate(),
                 animal.getName(), animal.getAge(), animal.getGender(), animal.getWeight(), animal.isNeuter(),
                 animal.getKind(), animal.getDetail(), animal.getPlace(), animal.getHealthState(),
                 animal.getActivity(), animal.getSociality(), animal.getFriendly(), animal.isAdoptionState(),
-                future.get());
+                animalFileList);
     }
 
     @GetMapping("/promotion/{no}")

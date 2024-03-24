@@ -2,6 +2,7 @@ package project;
 
 
 import entity.Animal;
+import entity.AnimalFile;
 import entity.Promotion;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -12,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
+import project.async.AsyncMethod;
 import project.dto.PromotionForm;
 import project.dto.PromotionModifyForm;
 import project.repository.AnimalFileRepository;
@@ -21,11 +23,14 @@ import project.service.PromotionService;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -41,11 +46,13 @@ public class PromotionServiceTest {
     private AnimalRepository animalRepo;
     @Mock
     private AnimalFileRepository fileRepo;
+    @Mock
+    private AsyncMethod asyncMethod;
     @InjectMocks
     private PromotionService service;
 
     @Test
-    public void savePromotionSuccessTest() throws IOException {
+    public void savePromotionSuccessTest() {
         ArgumentCaptor<Promotion> proCaptor = ArgumentCaptor.forClass(Promotion.class);
 
         Animal animal = new Animal("머핀", 5, "암컷", 3.5, true, "친칠라", "믹스",
@@ -148,4 +155,21 @@ public class PromotionServiceTest {
         Throwable ex = Assertions.assertThrows(NullPointerException.class, () -> service.updatePromotion(dto));
         assertThat(ex.getMessage()).isEqualTo("수정 가능한 Promotion 데이터가 존재하지 않습니다.");
     }
+
+//    @Test
+//    public void saveImageFileTest() throws IOException, ExecutionException, InterruptedException {
+//        List<AnimalFile> list = new ArrayList<>();
+//        for (int i = 0; i < 4; i++) {
+//            AnimalFile animalFile = new AnimalFile(i, "file" + i, "server" + i, "promotion");
+//            list.add(animalFile);
+//        }
+//        List<AnimalFile> fileList = service.saveAnimalFile(0, new ArrayList<>());
+//        int num = 0;
+//        for(AnimalFile file : fileList){
+//            assertThat(file.getPromotionNo()).isEqualTo(num);
+//            num++;
+//        }
+//
+//        assertThat(fileList.size()).isEqualTo(list.size());
+//    }
 }

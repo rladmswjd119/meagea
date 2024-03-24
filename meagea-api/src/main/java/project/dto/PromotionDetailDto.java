@@ -32,5 +32,5 @@ public class PromotionDetailDto {
     private int friendly;
     private boolean adoptionState;
 
-    private List<AnimalFile> imageLIst;
+    private List<AnimalFile> imageList;
 }

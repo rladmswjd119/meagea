@@ -8,7 +8,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.async.AsyncRequestTimeoutException;
 import org.springframework.web.multipart.MultipartFile;
+import project.async.AsyncMethod;
 import project.dto.PromotionForm;
 import project.dto.PromotionModifyForm;
 import project.repository.AnimalFileRepository;
@@ -24,6 +26,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Future;
 
@@ -35,6 +38,7 @@ public class PromotionService {
     private final AnimalRepository animalRepo;
     private final AnimalFileRepository fileRepo;
     private final LogRepository logRepo;
+    private final AsyncMethod asyncMethod;
 
     public Promotion savePromotion(PromotionForm form) {
         Optional<Animal> animal = animalRepo.findById(form.getAnimalNo());
@@ -44,25 +48,20 @@ public class PromotionService {
         return proRepo.save(new Promotion(form.getTitle(), animal.get().getNo(), form.getIntroduction(), form.getCondition()));
     }
 
-    @Async("fileThread")
-    public Future<List<AnimalFile>> saveAnimalFile(int proNo, List<MultipartFile> imageList) throws IOException {
+    public void saveAnimalFile(int proNo, List<MultipartFile> imageList) throws IOException {
         AnimalFileManager fileMan = new AnimalFileManager();
-        List<AnimalFile> animalFileList = new ArrayList<>();
         try {
             if(imageList.size() > 10) {
                 throw new IOException("이미지 파일은 최대 4개까지 첨부가 가능합니다.");
             }
 
-            for(MultipartFile m : imageList) {
-                AnimalFile animalFile = new AnimalFile(proNo, m.getOriginalFilename(), fileMan.serverFile(m), "promotion");
-                fileRepo.save(animalFile);
-                animalFileList.add(animalFile);
-            }
+            // 비동기
+            asyncMethod.saveAnimalFileAsync(imageList, proNo, fileMan);
+
         } catch (IOException ex){
             proRepo.deleteById(proNo);
             throw new IOException("홍보글 생성이 취소되었습니다.");
         }
-        return new AsyncResult<>(animalFileList);
     }
 
     public Promotion findPromotionByNo(int no) {
