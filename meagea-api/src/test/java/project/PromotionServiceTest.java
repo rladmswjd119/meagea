@@ -156,20 +156,21 @@ public class PromotionServiceTest {
         assertThat(ex.getMessage()).isEqualTo("수정 가능한 Promotion 데이터가 존재하지 않습니다.");
     }
 
-//    @Test
-//    public void saveImageFileTest() throws IOException, ExecutionException, InterruptedException {
-//        List<AnimalFile> list = new ArrayList<>();
-//        for (int i = 0; i < 4; i++) {
-//            AnimalFile animalFile = new AnimalFile(i, "file" + i, "server" + i, "promotion");
-//            list.add(animalFile);
-//        }
-//        List<AnimalFile> fileList = service.saveAnimalFile(0, new ArrayList<>());
-//        int num = 0;
-//        for(AnimalFile file : fileList){
-//            assertThat(file.getPromotionNo()).isEqualTo(num);
-//            num++;
-//        }
-//
-//        assertThat(fileList.size()).isEqualTo(list.size());
-//    }
+    @Test
+    public void saveImageFileTest() throws IOException, ExecutionException, InterruptedException {
+        List<AnimalFile> list = new ArrayList<>();
+        for (int i = 0; i < 4; i++) {
+            AnimalFile animalFile = new AnimalFile(i, "file" + i, "server" + i, "promotion");
+            list.add(animalFile);
+        }
+
+        List<AnimalFile> fileList = service.saveAnimalFile(0, new ArrayList<>());
+        int num = 0;
+        for(AnimalFile file : fileList){
+            assertThat(file.getPromotionNo()).isEqualTo(num);
+            num++;
+        }
+
+        assertThat(fileList.size()).isEqualTo(list.size());
+    }
 }

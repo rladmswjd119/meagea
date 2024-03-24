@@ -30,7 +30,7 @@ public class PromotionControllerTest {
     public void 입양_홍보글_생성() {
         MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
         map.add("title", "제목");
-        map.add("animalNo", 6032);
+        map.add("animalNo", 8209);
         map.add("introduction", "귀여움");
         map.add("condition", "집 좋아하시는 분");
         for(int i = 0; i < 4; i++) {

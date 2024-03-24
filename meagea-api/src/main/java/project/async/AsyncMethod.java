@@ -18,10 +18,10 @@ public class AsyncMethod {
     private final AnimalFileRepository fileRepo;
 
     @Async("fileThread")
-    public void saveAnimalFileAsync(List<MultipartFile> imageList, int proNo, AnimalFileManager fileMan) throws IOException {
-        for(MultipartFile m : imageList) {
-            AnimalFile animalFile = new AnimalFile(proNo, m.getOriginalFilename(), fileMan.serverFile(m), "promotion");
-            fileRepo.save(animalFile);
-        }
+    public void saveAnimalFileAsync(List<MultipartFile> imageList, int proNo, AnimalFileManager fileMan, int i) throws IOException {
+        MultipartFile m = imageList.get(i);
+        System.out.println(m.getOriginalFilename());
+        AnimalFile animalFile = new AnimalFile(proNo, m.getOriginalFilename(), fileMan.serverFile(m), "promotion");
+        fileRepo.save(animalFile);
     }
 }

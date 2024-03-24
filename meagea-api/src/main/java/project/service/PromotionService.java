@@ -48,7 +48,7 @@ public class PromotionService {
         return proRepo.save(new Promotion(form.getTitle(), animal.get().getNo(), form.getIntroduction(), form.getCondition()));
     }
 
-    public void saveAnimalFile(int proNo, List<MultipartFile> imageList) throws IOException {
+    public List<AnimalFile> saveAnimalFile(int proNo, List<MultipartFile> imageList) throws IOException {
         AnimalFileManager fileMan = new AnimalFileManager();
         try {
             if(imageList.size() > 10) {
@@ -56,12 +56,16 @@ public class PromotionService {
             }
 
             // 비동기
-            asyncMethod.saveAnimalFileAsync(imageList, proNo, fileMan);
+            for(int i = 0; i < imageList.size(); i++) {
+                asyncMethod.saveAnimalFileAsync(imageList, proNo, fileMan, i);
+            }
 
         } catch (IOException ex){
             proRepo.deleteById(proNo);
             throw new IOException("홍보글 생성이 취소되었습니다.");
         }
+
+        return findAllAnimalFIleByPromotionNo(proNo);
     }
 
     public Promotion findPromotionByNo(int no) {
