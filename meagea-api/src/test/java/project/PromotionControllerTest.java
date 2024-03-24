@@ -30,7 +30,7 @@ public class PromotionControllerTest {
     public void 입양_홍보글_생성() {
         MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
         map.add("title", "제목");
-        map.add("animalNo", 8209);
+        map.add("animalNo", 8045);
         map.add("introduction", "귀여움");
         map.add("condition", "집 좋아하시는 분");
         for(int i = 0; i < 4; i++) {
@@ -46,16 +46,16 @@ public class PromotionControllerTest {
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         PromotionDetailDto detailDto = responseEntity.getBody();
         assertThat(detailDto.getIntroduction()).isEqualTo("귀여움");
-        assertThat(detailDto.getImageList().size()).isEqualTo(4);
     }
 
 
     @Test
     public void 입양_홍보글_특정_조회(){
-        String url = "/meagea/promotion/" + 2858;
+        String url = "/meagea/promotion/" + 5112;
         ResponseEntity<PromotionDetailDto> responseEntity = testRestTemplate.getForEntity(url, PromotionDetailDto.class);
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(responseEntity.getBody().getTitle()).isEqualTo("제목");
+        assertThat(responseEntity.getBody().getImageList().size()).isEqualTo(4);
     }
 
     @Test

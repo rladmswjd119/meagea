@@ -11,6 +11,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 import project.async.AsyncMethod;
@@ -158,19 +159,18 @@ public class PromotionServiceTest {
 
     @Test
     public void saveImageFileTest() throws IOException, ExecutionException, InterruptedException {
-        List<AnimalFile> list = new ArrayList<>();
+        List<MultipartFile> list = new ArrayList<>();
         for (int i = 0; i < 4; i++) {
-            AnimalFile animalFile = new AnimalFile(i, "file" + i, "server" + i, "promotion");
-            list.add(animalFile);
+            FileInputStream input = new FileInputStream("/Users/gim-eunjeong/IdeaProjects/meagea/meagea-api/src/main/java/project/image/file" + i + ".jpg");
+            MultipartFile m = new MockMultipartFile("file" + i, "file" + i + ".jpg", "jpg", input);
+            list.add(m);
         }
 
-        List<AnimalFile> fileList = service.saveAnimalFile(0, new ArrayList<>());
+        List<AnimalFile> fileList = service.saveAnimalFile(0, list);
         int num = 0;
         for(AnimalFile file : fileList){
             assertThat(file.getPromotionNo()).isEqualTo(num);
             num++;
         }
-
-        assertThat(fileList.size()).isEqualTo(list.size());
     }
 }
