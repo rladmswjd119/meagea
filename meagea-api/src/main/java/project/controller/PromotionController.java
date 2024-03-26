@@ -33,7 +33,7 @@ public class PromotionController {
     private final LogService logService;
 
     @PostMapping("/promotion")
-    public PromotionDetailDto addPromotion(@ModelAttribute PromotionForm form) throws IOException, ExecutionException, InterruptedException {
+    public PromotionDetailDto addPromotion(@ModelAttribute PromotionForm form) throws Exception {
         Promotion pro = proService.savePromotion(form);
         Animal animal = animalService.findAnimalByNo(form.getAnimalNo());
         List<AnimalFile> animalFileList = proService.saveAnimalFile(pro.getNo(), form.getImageList());

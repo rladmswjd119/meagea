@@ -5,10 +5,7 @@ import entity.AnimalFile;
 import entity.Log;
 import entity.Promotion;
 import lombok.RequiredArgsConstructor;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.request.async.AsyncRequestTimeoutException;
 import org.springframework.web.multipart.MultipartFile;
 import project.async.AsyncMethod;
 import project.dto.PromotionForm;
@@ -23,12 +20,8 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
 
 @Service
 @RequiredArgsConstructor
@@ -50,6 +43,7 @@ public class PromotionService {
 
     public List<AnimalFile> saveAnimalFile(int proNo, List<MultipartFile> imageList) throws IOException {
         AnimalFileManager fileMan = new AnimalFileManager();
+        List<AnimalFile> fileList = new ArrayList<>();
         try {
             if(imageList.size() > 10) {
                 throw new IOException("이미지 파일은 최대 4개까지 첨부가 가능합니다.");
@@ -57,15 +51,16 @@ public class PromotionService {
 
             // 비동기
             for(int i = 0; i < imageList.size(); i++) {
-                asyncMethod.saveAnimalFileAsync(imageList, proNo, fileMan, i);
+                int num = i;
+                CompletableFuture.supplyAsync(() -> asyncMethod.saveAnimalFileAsync(imageList, proNo, fileMan, num)).thenAccept(file -> fileList.add(file.join()));
             }
 
-        } catch (IOException ex){
+        } catch (RuntimeException ex){
             proRepo.deleteById(proNo);
             throw new IOException("홍보글 생성이 취소되었습니다.");
         }
 
-        return findAllAnimalFIleByPromotionNo(proNo);
+        return fileList;
     }
 
     public Promotion findPromotionByNo(int no) {
