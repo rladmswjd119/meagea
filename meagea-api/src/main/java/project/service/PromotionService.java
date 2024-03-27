@@ -52,13 +52,20 @@ public class PromotionService {
             // 비동기
             for(int i = 0; i < imageList.size(); i++) {
                 int num = i;
-                CompletableFuture.supplyAsync(() -> asyncMethod.saveAnimalFileAsync(imageList, proNo, fileMan, num)).thenAccept(file -> fileList.add(file.join()));
+                CompletableFuture.supplyAsync(() -> asyncMethod.saveAnimalFileAsync(imageList, proNo, fileMan, num))
+                                 .thenAccept(file -> fileList.add(file.join()));
+            }
+
+            if(fileList.size() != imageList.size()) {
+                throw new RuntimeException();
             }
 
         } catch (RuntimeException ex){
+            fileRepo.deleteByPromotionNo(proNo);
             proRepo.deleteById(proNo);
             throw new IOException("홍보글 생성이 취소되었습니다.");
         }
+
 
         return fileList;
     }
