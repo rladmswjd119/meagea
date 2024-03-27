@@ -14,10 +14,12 @@ public class AsyncConfig {
     @Bean(name = "fileThread")
     public Executor imageFileThreadPoolTaskExecutor() {
         ThreadPoolTaskExecutor thread = new ThreadPoolTaskExecutor();
-        thread.setCorePoolSize(4);
-        thread.setMaxPoolSize(10);
+        thread.setCorePoolSize(10);
+        thread.setMaxPoolSize(50);
         thread.setQueueCapacity(100);
         thread.setThreadNamePrefix("animalFile-");
+        thread.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
+        thread.setWaitForTasksToCompleteOnShutdown(true);
 
         return thread;
     }
