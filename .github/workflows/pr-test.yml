@@ -27,7 +27,7 @@ jobs:
       # 테스트 후 Result 출력
       - name: Publish Unit Test Results
         uses: EnricoMi/publish-unit-test-result-action@v1
-        if: ${{ always() }}  # 'always' : 테스트 실패해도 Result 출력
+        if: ${{ always() }}
         with:
           files: build/test-results/**/*.xml
 
