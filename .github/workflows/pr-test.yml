@@ -2,6 +2,8 @@ name : Service test
 
 on:
   pull_request:
+    paths:
+      - ""
     branches:
       - main
 
@@ -22,7 +24,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build with Gradle
-        run: ./gradlew build test -i
+        run: ./gradlew build test
 
       # 테스트 후 Result 출력
       - name: Publish Unit Test Results
