@@ -13,9 +13,14 @@ java {
 	sourceCompatibility = '17' // 자바 버전 명시
 }
 
-dependencies {
-}
-
 repositories {
 	mavenCentral()
+}
+
+bootJar {
+	enabled = false
+}
+
+jar {
+	enabled = true
 }
