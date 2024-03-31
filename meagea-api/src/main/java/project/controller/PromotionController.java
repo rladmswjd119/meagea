@@ -32,20 +32,20 @@ public class PromotionController {
     private final AnimalService animalService;
     private final LogService logService;
 
-    @PostMapping("/promotion")
-    public PromotionDetailDto addPromotion(@ModelAttribute PromotionForm form) throws Exception {
-        Promotion pro = proService.savePromotion(form);
-        Animal animal = animalService.findAnimalByNo(form.getAnimalNo());
-        CompletableFuture<AnimalFile> animalFileList = proService.saveAnimalFile(pro.getNo(), form.getImageList());
-
-
-        return new PromotionDetailDto(pro.getNo(), pro.getTitle(), pro.getAnimalNo(), pro.getIntroduction(),
-                pro.getTerms(), pro.getMakeDate(), pro.getModifyDate(),
-                animal.getName(), animal.getAge(), animal.getGender(), animal.getWeight(), animal.isNeuter(),
-                animal.getKind(), animal.getDetail(), animal.getPlace(), animal.getHealthState(),
-                animal.getActivity(), animal.getSociality(), animal.getFriendly(), animal.isAdoptionState(),
-                animalFileList);
-    }
+//    @PostMapping("/promotion")
+//    public PromotionDetailDto addPromotion(@ModelAttribute PromotionForm form) throws Exception {
+//        Promotion pro = proService.savePromotion(form);
+//        Animal animal = animalService.findAnimalByNo(form.getAnimalNo());
+//        CompletableFuture<AnimalFile> animalFileList = proService.saveAnimalFile(pro.getNo(), form.getImageList());
+//
+//
+//        return new PromotionDetailDto(pro.getNo(), pro.getTitle(), pro.getAnimalNo(), pro.getIntroduction(),
+//                pro.getTerms(), pro.getMakeDate(), pro.getModifyDate(),
+//                animal.getName(), animal.getAge(), animal.getGender(), animal.getWeight(), animal.isNeuter(),
+//                animal.getKind(), animal.getDetail(), animal.getPlace(), animal.getHealthState(),
+//                animal.getActivity(), animal.getSociality(), animal.getFriendly(), animal.isAdoptionState(),
+//                animalFileList);
+//    }
 
     @GetMapping("/promotion/{no}")
     public PromotionDetailDto getPromotion(@PathVariable int no) {
