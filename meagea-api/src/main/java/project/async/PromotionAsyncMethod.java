@@ -2,7 +2,6 @@ package project.async;
 
 import entity.AnimalFile;
 import lombok.RequiredArgsConstructor;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import project.repository.AnimalFileRepository;
@@ -10,15 +9,13 @@ import project.unit.AnimalFileManager;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 @Component
 @RequiredArgsConstructor
-public class AsyncMethod {
+public class PromotionAsyncMethod {
 
     private final AnimalFileRepository fileRepo;
 
-    //@Async("fileThread")
     public AnimalFile saveAnimalFileAsync(List<MultipartFile> imageList, int proNo, AnimalFileManager fileMan, int i) {
         AnimalFile animalFile;
         try {

@@ -7,7 +7,7 @@ import entity.Promotion;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import project.async.AsyncMethod;
+import project.async.PromotionAsyncMethod;
 import project.dto.PromotionForm;
 import project.dto.PromotionModifyForm;
 import project.repository.AnimalFileRepository;
@@ -31,7 +31,7 @@ public class PromotionService {
     private final AnimalRepository animalRepo;
     private final AnimalFileRepository fileRepo;
     private final LogRepository logRepo;
-    private final AsyncMethod asyncMethod;
+    private final PromotionAsyncMethod promotionAsyncMethod;
 
     public Promotion savePromotion(PromotionForm form) {
         Optional<Animal> animal = animalRepo.findById(form.getAnimalNo());
@@ -53,7 +53,7 @@ public class PromotionService {
             // 비동기
             for (int i = 0; i < imageList.size(); i++) {
                 int num = i;
-                futureAnimalFile = CompletableFuture.supplyAsync(() -> asyncMethod.saveAnimalFileAsync(imageList, proNo, fileMan, num));
+                futureAnimalFile = CompletableFuture.supplyAsync(() -> promotionAsyncMethod.saveAnimalFileAsync(imageList, proNo, fileMan, num));
             }
 
             if (fileList.size() != imageList.size()) {

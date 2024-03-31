@@ -36,8 +36,8 @@ public class PromotionController {
     public PromotionDetailDto addPromotion(@ModelAttribute PromotionForm form) throws Exception {
         Promotion pro = proService.savePromotion(form);
         Animal animal = animalService.findAnimalByNo(form.getAnimalNo());
-        //CompletableFuture<AnimalFile> animalFileList = proService.saveAnimalFile(pro.getNo(), form.getImageList());
-        List<AnimalFile> animalFileList = null;
+        CompletableFuture<AnimalFile> animalFileList = proService.saveAnimalFile(pro.getNo(), form.getImageList());
+
 
         return new PromotionDetailDto(pro.getNo(), pro.getTitle(), pro.getAnimalNo(), pro.getIntroduction(),
                 pro.getTerms(), pro.getMakeDate(), pro.getModifyDate(),

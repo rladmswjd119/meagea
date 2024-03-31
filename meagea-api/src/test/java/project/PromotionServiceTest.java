@@ -11,10 +11,9 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
-import project.async.AsyncMethod;
+import project.async.PromotionAsyncMethod;
 import project.dto.PromotionForm;
 import project.dto.PromotionModifyForm;
 import project.repository.AnimalFileRepository;
@@ -24,13 +23,10 @@ import project.service.PromotionService;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -48,7 +44,7 @@ public class PromotionServiceTest {
     @Mock
     private AnimalFileRepository fileRepo;
     @Mock
-    private AsyncMethod asyncMethod;
+    private PromotionAsyncMethod promotionAsyncMethod;
     @InjectMocks
     private PromotionService service;
 
