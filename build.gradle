@@ -18,9 +18,5 @@ repositories {
 }
 
 bootJar {
-	enabled = false
-}
-
-jar {
-	enabled = true
+	mainClass = 'project.MeageaApplication'
 }
