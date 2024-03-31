@@ -1,0 +1,40 @@
+name : Service test
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest	# 우분투 가상환경
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v1
+        with:
+          java-version: 17
+
+      # Gradle wrapper 파일 실행 권한주기
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      # Gradle test 실행
+      - name: Test with Gradle
+        run: ./gradlew --info test
+
+      # 테스트 후 Result 출력
+      - name: Publish Unit Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v1
+        if: ${{ always() }}  # 'always' : 테스트 실패해도 Result 출력
+        with:
+          files: build/test-results/**/*.xml
+
+      # 캐시 파일 삭제
+      - name: Cleanup Gradle Cache
+        if: ${{ always() }}
+        run: |
+          rm -f ~/.gradle/caches/modules-2/modules-2.lock
+          rm -f ~/.gradle/caches/modules-2/gc.properties
+

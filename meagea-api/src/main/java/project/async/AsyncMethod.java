@@ -18,8 +18,8 @@ public class AsyncMethod {
 
     private final AnimalFileRepository fileRepo;
 
-    @Async("fileThread")
-    public CompletableFuture<AnimalFile> saveAnimalFileAsync(List<MultipartFile> imageList, int proNo, AnimalFileManager fileMan, int i) {
+    //@Async("fileThread")
+    public AnimalFile saveAnimalFileAsync(List<MultipartFile> imageList, int proNo, AnimalFileManager fileMan, int i) {
         AnimalFile animalFile;
         try {
             MultipartFile m = imageList.get(i);
@@ -30,6 +30,6 @@ public class AsyncMethod {
             throw new RuntimeException();
         }
 
-        return CompletableFuture.completedFuture(animalFile);
+        return animalFile;
     }
 }

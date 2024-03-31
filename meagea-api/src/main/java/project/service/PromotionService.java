@@ -41,33 +41,33 @@ public class PromotionService {
         return proRepo.save(new Promotion(form.getTitle(), animal.get().getNo(), form.getIntroduction(), form.getCondition()));
     }
 
-    public List<AnimalFile> saveAnimalFile(int proNo, List<MultipartFile> imageList) throws IOException {
+    public CompletableFuture<AnimalFile> saveAnimalFile(int proNo, List<MultipartFile> imageList) throws IOException {
         AnimalFileManager fileMan = new AnimalFileManager();
         List<AnimalFile> fileList = new ArrayList<>();
+        CompletableFuture<AnimalFile> futureAnimalFile = null;
         try {
-            if(imageList.size() > 10) {
+            if (imageList.size() > 10) {
                 throw new IOException("이미지 파일은 최대 4개까지 첨부가 가능합니다.");
             }
 
             // 비동기
-            for(int i = 0; i < imageList.size(); i++) {
+            for (int i = 0; i < imageList.size(); i++) {
                 int num = i;
-                CompletableFuture.supplyAsync(() -> asyncMethod.saveAnimalFileAsync(imageList, proNo, fileMan, num))
-                                 .thenAccept(file -> fileList.add(file.join()));
+                futureAnimalFile = CompletableFuture.supplyAsync(() -> asyncMethod.saveAnimalFileAsync(imageList, proNo, fileMan, num));
             }
 
-            if(fileList.size() != imageList.size()) {
+            if (fileList.size() != imageList.size()) {
                 throw new RuntimeException();
             }
 
-        } catch (RuntimeException ex){
+        } catch (RuntimeException ex) {
             fileRepo.deleteByPromotionNo(proNo);
             proRepo.deleteById(proNo);
             throw new IOException("홍보글 생성이 취소되었습니다.");
         }
 
 
-        return fileList;
+        return futureAnimalFile;
     }
 
     public Promotion findPromotionByNo(int no) {
