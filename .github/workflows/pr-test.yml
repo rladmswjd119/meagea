@@ -22,10 +22,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build with Gradle
-        run: ./gradlew build -x test
-
-      - name: Test with Gradle
-        run: SPRING_PROFILES_ACTIVE=[test] ./gradlew test
+        run: ./gradlew build test
 
       # 테스트 후 Result 출력
       - name: Publish Unit Test Results
