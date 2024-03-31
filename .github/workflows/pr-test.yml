@@ -3,7 +3,7 @@ name : Service test
 on:
   pull_request:
     branches:
-      - meagea-api
+      - main
 
 jobs:
   build:

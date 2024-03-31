@@ -19,3 +19,7 @@ dependencies {
 repositories {
 	mavenCentral()
 }
+
+bootJar {
+	enabled = false
+}
