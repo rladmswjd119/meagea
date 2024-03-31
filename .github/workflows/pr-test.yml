@@ -2,8 +2,6 @@ name : Service test
 
 on:
   pull_request:
-    paths:
-      - ""
     branches:
       - main
 
