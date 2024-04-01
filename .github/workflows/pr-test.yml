@@ -8,7 +8,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v2
 
@@ -16,6 +15,14 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 17
+
+      - name : Set up mySQL
+        uses: mirromutth/mysql-action@v1.1
+        with:
+          host port: 3306
+          container port: 3306
+          mysql database: 'meagea'
+          mysql root password: ${{ secrets.RootPassword }}
 
       # Gradle wrapper 파일 실행 권한주기
       - name: Grant execute permission for gradlew
