@@ -22,7 +22,8 @@ jobs:
           host port: 3306
           container port: 3306
           mysql database: 'meagea'
-          mysql root password: ${{ secrets.RootPassword }}
+          mysql user : 'root'
+          mysql password: 'zxcv1234'
 
       # Gradle wrapper 파일 실행 권한주기
       - name: Grant execute permission for gradlew
