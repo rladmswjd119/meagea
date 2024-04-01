@@ -45,6 +45,6 @@ public class AnimalControllerTest {
         String url = "/meagea/animal/" + 8209;
         AnimalDto animal = testRestTemplate.getForEntity(url, AnimalDto.class).getBody();
 
-        assertThat(animal.getName()).isEqualTo("가나슈");
+        assertThat(animal.getName()).isEqualTo("머핀");
     }
 }
