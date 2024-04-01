@@ -1,6 +1,6 @@
 package project;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.springframework.mock.web.MockMultipartFile;
 import project.unit.AnimalFileManager;
 
