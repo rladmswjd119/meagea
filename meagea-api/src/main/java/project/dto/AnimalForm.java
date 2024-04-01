@@ -2,9 +2,12 @@ package project.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
+@Setter
+@NoArgsConstructor
 public class AnimalForm {
     public AnimalForm(String name, int age, String gender, double weight, boolean neuter, String kind, String detail, String place,
                       int healthState, int activity, int sociality, int friendly) {

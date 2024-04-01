@@ -16,7 +16,6 @@ public class Animal {
         this.no = (int)(Math.random()*10000);
         this.name = name;
         this.age = age;
-        this.gender = gender;
         this.weight = weight;
         this.neuter = neuter;
         this.kind = kind;
@@ -27,6 +26,7 @@ public class Animal {
         this.sociality = sociality;
         this.friendly = friendly;
         this.adoptionState = false;
+        this.gender = gender;
         this.remove = 0;
     }
 
@@ -34,7 +34,6 @@ public class Animal {
     private int no;
     private String name;
     private int age;
-    private String gender;
     private double weight;
     private boolean neuter;
     private String kind;
@@ -45,5 +44,6 @@ public class Animal {
     private int sociality;
     private int friendly;
     private boolean adoptionState;
+    private String gender;
     private int remove;
 }

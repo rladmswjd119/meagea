@@ -51,7 +51,7 @@ public class PromotionControllerTest {
 
     @Test
     public void 입양_홍보글_특정_조회(){
-        String url = "/meagea/promotion/" + 5112;
+        String url = "/meagea/promotion/" + 1266;
         ResponseEntity<PromotionDetailDto> responseEntity = testRestTemplate.getForEntity(url, PromotionDetailDto.class);
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(responseEntity.getBody().getTitle()).isEqualTo("제목");
@@ -76,7 +76,7 @@ public class PromotionControllerTest {
 
         String url = "/meagea/promotion";
         MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
-        map.add("no", 2858);
+        map.add("no", 1266);
         map.add("title", "수정된 제목");
         for(int i = 0; i < 4; i++) {
             File file = new File("/Users/gim-eunjeong/IdeaProjects/meagea/meagea-api/src/main/java/project/image/"
@@ -94,7 +94,7 @@ public class PromotionControllerTest {
 
     @Test
     public void 홍보글_삭제_테스트(){
-        String url = "/meagea/promotion/" + 2858;
+        String url = "/meagea/promotion/" + 1266;
         testRestTemplate.delete(url);
     }
 }

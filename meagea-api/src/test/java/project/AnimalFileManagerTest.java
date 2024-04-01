@@ -15,7 +15,7 @@ public class AnimalFileManagerTest {
         AnimalFileManager fileMan = new AnimalFileManager();
 
         for (int i = 0; i < 4; i++) {
-            File file = new File("src\\main\\java\\project\\image\\" + "file" + i + ".jpg");
+            File file = new File("/Users/gim-eunjeong/IdeaProjects/meagea/meagea-api/src/main/java/project/image/" + "file" + i + ".jpg");
             FileInputStream input = new FileInputStream(file);
             MockMultipartFile mock = new MockMultipartFile("file" + i, "file" + i + ".jpg", "jpg", input);
             fileMan.serverFile(mock);

@@ -15,7 +15,6 @@ import project.dto.LogTatalDto;
 import java.io.File;
 import java.util.List;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
@@ -29,10 +28,11 @@ public class LogControllerTest {
         String url = "/meagea/log";
 
         MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
-        map.add("promotionNo", 4827);
+        map.add("promotionNo", 1266);
         map.add("body", "로그 내용");
         for (int i = 0; i < 4; i++) {
-            File file = new File("src\\main\\java\\project\\image\\" + "file" + i + ".jpg");
+            File file = new File("/Users/gim-eunjeong/IdeaProjects/meagea/meagea-api/src/main/java/project/image/"
+                    + "file" + i + ".jpg");
             FileSystemResource resource = new FileSystemResource(file);
             map.add("imageList", resource);
         }
