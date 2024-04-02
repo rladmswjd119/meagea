@@ -16,13 +16,13 @@ jobs:
         with:
           java-version: 17
 
-      - name : Set up mySQL
+      - name: Set up mySQL
         uses: samin/mysql-action@v1
         with:
           host port: 3306
           container port: 3306
           mysql database: 'meagea'
-          mysql user : 'root'
+          mysql user: 'root'
           mysql password: 'zxcv1234'
 
       # Gradle wrapper 파일 실행 권한주기
