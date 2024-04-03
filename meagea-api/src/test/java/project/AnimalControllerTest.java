@@ -20,7 +20,7 @@ public class AnimalControllerTest {
     @Test
     public void 유기동물_추가_테스트() {
         MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
-        map.add("name", "가나슈");
+        map.add("name", "바보쥐");
         map.add("age", 5);
         map.add("gender", "암컷");
         map.add("weight", 3.5);
@@ -37,7 +37,7 @@ public class AnimalControllerTest {
         ResponseEntity<AnimalDto> animalRe = testRestTemplate.postForEntity(url, map, AnimalDto.class);
         assertThat(animalRe.getStatusCode()).isEqualTo(HttpStatus.OK);
         AnimalDto animal2 = animalRe.getBody();
-        assertThat(animal2.getName()).isEqualTo("가나슈");
+        assertThat(animal2.getName()).isEqualTo("바보쥐");
     }
 
     @Test

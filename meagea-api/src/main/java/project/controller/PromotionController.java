@@ -2,7 +2,6 @@ package project.controller;
 
 import entity.Animal;
 import entity.AnimalFile;
-import entity.Log;
 import entity.Promotion;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -14,13 +13,9 @@ import project.service.PromotionService;
 import project.dto.PromotionForm;
 import project.dto.SimplePromotionDto;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 
 
 @RestController
@@ -32,20 +27,30 @@ public class PromotionController {
     private final AnimalService animalService;
     private final LogService logService;
 
-//    @PostMapping("/promotion")
-//    public PromotionDetailDto addPromotion(@ModelAttribute PromotionForm form) throws Exception {
-//        Promotion pro = proService.savePromotion(form);
-//        Animal animal = animalService.findAnimalByNo(form.getAnimalNo());
-//        CompletableFuture<AnimalFile> animalFileList = proService.saveAnimalFile(pro.getNo(), form.getImageList());
-//
-//
-//        return new PromotionDetailDto(pro.getNo(), pro.getTitle(), pro.getAnimalNo(), pro.getIntroduction(),
-//                pro.getTerms(), pro.getMakeDate(), pro.getModifyDate(),
-//                animal.getName(), animal.getAge(), animal.getGender(), animal.getWeight(), animal.isNeuter(),
-//                animal.getKind(), animal.getDetail(), animal.getPlace(), animal.getHealthState(),
-//                animal.getActivity(), animal.getSociality(), animal.getFriendly(), animal.isAdoptionState(),
-//                animalFileList);
-//    }
+    @PostMapping("/promotion")
+    public PromotionDetailDto addPromotion(@ModelAttribute PromotionForm form) throws Exception {
+        Promotion pro = proService.savePromotion(form);
+        Animal animal = animalService.findAnimalByNo(form.getAnimalNo());
+
+        List<AnimalFile> animalFileList = new ArrayList<>();
+        CompletableFuture<AnimalFile> fileFuture = proService.saveAnimalFile(pro.getNo(), form.getImageList());
+        CompletableFuture<List<AnimalFile>> fileListFuture = fileFuture.thenApplyAsync(file -> proService.turnAnimalList(file, animalFileList));
+        List<AnimalFile> finalList = new ArrayList<>();
+        finalList.add(fileFuture.get());
+//        CompletableFuture<PromotionDetailDto> future = fileListFuture.thenApply(list -> new PromotionDetailDto(pro.getNo(), pro.getTitle(), pro.getAnimalNo(), pro.getIntroduction(),
+//                                                                                    pro.getTerms(), pro.getMakeDate(), pro.getModifyDate(),
+//                                                                                    animal.getName(), animal.getAge(), animal.getGender(), animal.getWeight(), animal.isNeuter(),
+//                                                                                    animal.getKind(), animal.getDetail(), animal.getPlace(), animal.getHealthState(),
+//                                                                                    animal.getActivity(), animal.getSociality(), animal.getFriendly(), animal.isAdoptionState(),
+//                                                                                    list));
+
+        return new PromotionDetailDto(pro.getNo(), pro.getTitle(), pro.getAnimalNo(), pro.getIntroduction(),
+                pro.getTerms(), pro.getMakeDate(), pro.getModifyDate(),
+                animal.getName(), animal.getAge(), animal.getGender(), animal.getWeight(), animal.isNeuter(),
+                animal.getKind(), animal.getDetail(), animal.getPlace(), animal.getHealthState(),
+                animal.getActivity(), animal.getSociality(), animal.getFriendly(), animal.isAdoptionState(),
+                finalList);
+    }
 
     @GetMapping("/promotion/{no}")
     public PromotionDetailDto getPromotion(@PathVariable int no) {

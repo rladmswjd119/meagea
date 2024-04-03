@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import project.dto.LogForm;
 import project.dto.LogTatalDto;
+import project.dto.PromotionDetailDto;
 import project.repository.AnimalFileRepository;
 import project.repository.LogRepository;
 import project.unit.AnimalFileManager;

@@ -18,7 +18,6 @@ import project.unit.AnimalFileManager;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.*;
@@ -43,7 +42,6 @@ public class PromotionService {
 
     public CompletableFuture<AnimalFile> saveAnimalFile(int proNo, List<MultipartFile> imageList) throws IOException {
         AnimalFileManager fileMan = new AnimalFileManager();
-        List<AnimalFile> fileList = new ArrayList<>();
         CompletableFuture<AnimalFile> futureAnimalFile = null;
         try {
             if (imageList.size() > 10) {
@@ -56,17 +54,11 @@ public class PromotionService {
                 futureAnimalFile = CompletableFuture.supplyAsync(() -> promotionAsyncMethod.saveAnimalFileAsync(imageList, proNo, fileMan, num));
             }
 
-            if (fileList.size() != imageList.size()) {
-                throw new RuntimeException();
-            }
-
         } catch (RuntimeException ex) {
             fileRepo.deleteByPromotionNo(proNo);
             proRepo.deleteById(proNo);
             throw new IOException("홍보글 생성이 취소되었습니다.");
         }
-
-
         return futureAnimalFile;
     }
 
@@ -132,5 +124,11 @@ public class PromotionService {
         fileRepo.saveAll(deleteAnimalFileList);
 
         return deleteAnimalFileList;
+    }
+
+    public List<AnimalFile> turnAnimalList(AnimalFile file, List<AnimalFile> animalFileList) {
+        animalFileList.add(file);
+        System.out.println("turnAnimalList: " + file.getUploadFileName());
+        return animalFileList;
     }
 }
