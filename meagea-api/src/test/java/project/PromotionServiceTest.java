@@ -13,7 +13,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
-import project.async.PromotionAsyncMethod;
 import project.dto.PromotionForm;
 import project.dto.PromotionModifyForm;
 import project.repository.AnimalFileRepository;
@@ -27,7 +26,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.ExecutionException;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -43,8 +41,6 @@ public class PromotionServiceTest {
     private AnimalRepository animalRepo;
     @Mock
     private AnimalFileRepository fileRepo;
-    @Mock
-    private PromotionAsyncMethod promotionAsyncMethod;
     @InjectMocks
     private PromotionService service;
 

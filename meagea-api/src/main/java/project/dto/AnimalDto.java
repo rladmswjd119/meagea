@@ -8,6 +8,7 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 public class AnimalDto {
+    private int no;
     private String name;
     private int age;
     private String gender;

@@ -33,23 +33,23 @@ public class PromotionController {
         Animal animal = animalService.findAnimalByNo(form.getAnimalNo());
 
         List<AnimalFile> animalFileList = new ArrayList<>();
-        CompletableFuture<AnimalFile> fileFuture = proService.saveAnimalFile(pro.getNo(), form.getImageList());
-        CompletableFuture<List<AnimalFile>> fileListFuture = fileFuture.thenApplyAsync(file -> proService.turnAnimalList(file, animalFileList));
-        List<AnimalFile> finalList = new ArrayList<>();
-        finalList.add(fileFuture.get());
-//        CompletableFuture<PromotionDetailDto> future = fileListFuture.thenApply(list -> new PromotionDetailDto(pro.getNo(), pro.getTitle(), pro.getAnimalNo(), pro.getIntroduction(),
-//                                                                                    pro.getTerms(), pro.getMakeDate(), pro.getModifyDate(),
-//                                                                                    animal.getName(), animal.getAge(), animal.getGender(), animal.getWeight(), animal.isNeuter(),
-//                                                                                    animal.getKind(), animal.getDetail(), animal.getPlace(), animal.getHealthState(),
-//                                                                                    animal.getActivity(), animal.getSociality(), animal.getFriendly(), animal.isAdoptionState(),
-//                                                                                    list));
+        CompletableFuture<PromotionDetailDto> result = null;
+        List<CompletableFuture<AnimalFile>> futureAnimalFileList = proService.saveAnimalFile(pro.getNo(), form.getImageList());
+        for(CompletableFuture<AnimalFile> future : futureAnimalFileList) {
+            result = future.thenApplyAsync(file -> proService.turnAnimalList(file, animalFileList))
+                                                             .thenApply(animalFiles -> new PromotionDetailDto(pro.getNo(), pro.getTitle(), pro.getAnimalNo(),
+                                                                                            pro.getIntroduction(), pro.getTerms(),
+                                                                                            pro.getMakeDate(), pro.getModifyDate(),
+                                                                                            animal.getName(), animal.getAge(),
+                                                                                            animal.getGender(), animal.getWeight(),
+                                                                                            animal.isNeuter(), animal.getKind(),
+                                                                                            animal.getDetail(), animal.getPlace(),
+                                                                                            animal.getHealthState(), animal.getActivity(),
+                                                                                            animal.getSociality(), animal.getFriendly(),
+                                                                                            animal.isAdoptionState(), animalFiles));
+        }
 
-        return new PromotionDetailDto(pro.getNo(), pro.getTitle(), pro.getAnimalNo(), pro.getIntroduction(),
-                pro.getTerms(), pro.getMakeDate(), pro.getModifyDate(),
-                animal.getName(), animal.getAge(), animal.getGender(), animal.getWeight(), animal.isNeuter(),
-                animal.getKind(), animal.getDetail(), animal.getPlace(), animal.getHealthState(),
-                animal.getActivity(), animal.getSociality(), animal.getFriendly(), animal.isAdoptionState(),
-                finalList);
+        return result.get();
     }
 
     @GetMapping("/promotion/{no}")
