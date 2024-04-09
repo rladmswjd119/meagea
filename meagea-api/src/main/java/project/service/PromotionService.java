@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import project.dto.PromotionForm;
 import project.dto.PromotionModifyForm;
+import project.eunm.FileType;
 import project.repository.AnimalFileRepository;
 import project.repository.AnimalRepository;
 import project.repository.LogRepository;
@@ -66,7 +67,7 @@ public class PromotionService {
         try {
             MultipartFile m = imageList.get(i);
             System.out.println("saveAnimalFileAsync: " + m.getOriginalFilename());
-            animalFile = new AnimalFile(proNo, m.getOriginalFilename(), fileMan.serverFile(m), "promotion");
+            animalFile = new AnimalFile(proNo, m.getOriginalFilename(), fileMan.serverFile(m), FileType.PRO.name());
             fileRepo.save(animalFile);
         } catch (IOException e) {
             throw new RuntimeException();
