@@ -5,6 +5,7 @@ import entity.AnimalFile;
 import entity.Log;
 import entity.Promotion;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import project.dto.PromotionForm;
@@ -31,6 +32,7 @@ public class PromotionService {
     private final AnimalRepository animalRepo;
     private final AnimalFileRepository fileRepo;
     private final LogRepository logRepo;
+    private final ResourceLoader resourceLoader;
 
     public Promotion savePromotion(PromotionForm form) {
         Optional<Animal> animal = animalRepo.findById(form.getAnimalNo());
