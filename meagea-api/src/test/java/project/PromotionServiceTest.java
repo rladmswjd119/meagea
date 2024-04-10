@@ -119,7 +119,7 @@ public class PromotionServiceTest {
     public void updatePromotionSuccessTest() throws IOException {
         List<MultipartFile> list = new ArrayList<>();
         for (int i = 0; i < 4; i++) {
-            File file = new File("/Users/gim-eunjeong/IdeaProjects/meagea/meagea-api/src/main/java/project/image/"
+            File file = new File("meagea/meagea-api/src/main/java/project/image/"
                     + "file" + i + ".jpg");
             MockMultipartFile mul = new MockMultipartFile("file" + i, new FileInputStream(file));
             list.add(mul);
