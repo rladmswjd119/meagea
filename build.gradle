@@ -17,6 +17,6 @@ repositories {
 	mavenCentral()
 }
 
-bootJar {
-	mainClass = 'project.MeageaApplication'
-}
+//bootJar {
+//	mainClass = 'project.MeageaApplication'
+//}
