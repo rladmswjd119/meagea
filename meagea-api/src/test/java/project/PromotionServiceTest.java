@@ -126,7 +126,9 @@ public class PromotionServiceTest {
     public void updatePromotionSuccessTest() throws IOException {
         List<MultipartFile> list = new ArrayList<>();
         for (int i = 0; i < 4; i++) {
-            File file = ResourceUtils.getFile("classpath:file" + i + ".jpg");
+            File file = new ClassPathResource("file" + i + ".jpg").getFile();
+
+//            File file = ResourceUtils.getFile("classpath:file" + i + ".jpg");
             MockMultipartFile mul = new MockMultipartFile("file" + i, new FileInputStream(file));
             list.add(mul);
         }
