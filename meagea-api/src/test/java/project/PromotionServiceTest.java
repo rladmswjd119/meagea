@@ -13,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.core.io.*;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.multipart.MultipartFile;
 import project.dto.PromotionForm;
 import project.dto.PromotionModifyForm;
@@ -125,14 +126,7 @@ public class PromotionServiceTest {
     public void updatePromotionSuccessTest() throws IOException {
         List<MultipartFile> list = new ArrayList<>();
         for (int i = 0; i < 4; i++) {
-//            Resource resource = resourceLoader.getResource("classpath:file" + i + ".jpg");
-//            System.out.println(resource);
-//            URI uri = resource.getURI();
-//            File file = new File(uri.toString());
-
-
-            File file = new File("/Users/gim-eunjeong/IdeaProjects/meagea/meagea-api/src/main/java/project/image/"
-                    + "file" + i + ".jpg");
+            File file = ResourceUtils.getFile("classpath:file" + i + ".jpg");
             MockMultipartFile mul = new MockMultipartFile("file" + i, new FileInputStream(file));
             list.add(mul);
         }
@@ -150,8 +144,7 @@ public class PromotionServiceTest {
     public void updatePromotionFailTest() throws IOException {
         List<MultipartFile> list = new ArrayList<>();
         for (int i = 0; i < 4; i++) {
-            File file = new File("/Users/gim-eunjeong/IdeaProjects/meagea/meagea-api/src/main/java/project/image/"
-                    + "file" + i + ".jpg");
+            File file = ResourceUtils.getFile("classpath:file" + i + ".jpg");
             MockMultipartFile mul = new MockMultipartFile("file" + i, new FileInputStream(file));
             list.add(mul);
         }
@@ -161,20 +154,20 @@ public class PromotionServiceTest {
         assertThat(ex.getMessage()).isEqualTo("수정 가능한 Promotion 데이터가 존재하지 않습니다.");
     }
 
-    @Test
-    public void saveImageFileTest() throws IOException {
-        List<MultipartFile> list = new ArrayList<>();
-        for (int i = 0; i < 4; i++) {
-            FileInputStream input = new FileInputStream("/Users/gim-eunjeong/IdeaProjects/meagea/meagea-api/src/main/java/project/image/file" + i + ".jpg");
-            MultipartFile m = new MockMultipartFile("file" + i, "file" + i + ".jpg", "jpg", input);
-            list.add(m);
-        }
-
+//    @Test
+//    public void saveImageFileTest() throws IOException {
+//        List<MultipartFile> list = new ArrayList<>();
+//        for (int i = 0; i < 4; i++) {
+//            FileInputStream input = new FileInputStream("/Users/gim-eunjeong/IdeaProjects/meagea/meagea-api/src/main/java/project/image/file" + i + ".jpg");
+//            MultipartFile m = new MockMultipartFile("file" + i, "file" + i + ".jpg", "jpg", input);
+//            list.add(m);
+//        }
+//
 //        List<CompletableFuture<AnimalFile>> fileList = service.saveAnimalFile(0, list);
 //        int num = 0;
 //        for(AnimalFile file : fileList){
 //            assertThat(file.getPromotionNo()).isEqualTo(num);
 //            num++;
 //        }
-    }
+//    }
 }

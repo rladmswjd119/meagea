@@ -1,32 +1,32 @@
-#name : Service test
-#
-#on:
-#  pull_request:
-#    branches:
-#      - main
-#
-#jobs:
-#  build:
-#    runs-on: ubuntu-latest
-#    steps:
-#      - uses: actions/checkout@v2
-#
-#      - name: Set up JDK 17
-#        uses: actions/setup-java@v1
-#        with:
-#          java-version: 17
-#
-#      - name: Set up mySQL
-#        uses: samin/mysql-action@v1
-#        with:
-#          mysql database: 'meagea'
-#          mysql user: 'root'
-#          mysql password: 'zxcv1234'
-#
-#      # Gradle wrapper 파일 실행 권한주기
-#      - name: Grant execute permission for gradlew
-#        run: chmod +x gradlew
-#
-#      - name: Build with Gradle
-#        run: ./gradlew build test
+name : Service test
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v1
+        with:
+          java-version: 17
+
+      - name: Set up mySQL
+        uses: samin/mysql-action@v1
+        with:
+          mysql database: 'meagea'
+          mysql user: 'root'
+          mysql password: 'zxcv1234'
+
+      # Gradle wrapper 파일 실행 권한주기
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Build with Gradle
+        run: ./gradlew build test
 
