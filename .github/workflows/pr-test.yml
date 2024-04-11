@@ -36,7 +36,7 @@ jobs:
         mysql:
           image: mysql:5.7
           env:
-            MYSQL_ROOT_PASSWORD: MYSQL_ROOT_PASSWORD
+            MYSQL_ROOT_PASSWORD: ${{MYSQL_ROOT_PASSWORD}}
           ports:
             - 3306:3306
           options: --health-cmd "mysqladmin ping" --health-interval 10s --health-timeout 5s --health-retries 10
@@ -44,10 +44,10 @@ jobs:
       steps:
         - name: Create databases
           run:
-            mysql -h 127.0.0.1 -P 3306 -u root --password=MYSQL_ROOT_PASSWORD -e 'CREATE DATABASE promotion;'
-            mysql -h 127.0.0.1 -P 3306 -u root --password=MYSQL_ROOT_PASSWORD -e 'CREATE DATABASE animal;'
-            mysql -h 127.0.0.1 -P 3306 -u root --password=MYSQL_ROOT_PASSWORD -e 'CREATE DATABASE animal_file;'
-            mysql -h 127.0.0.1 -P 3306 -u root --password=MYSQL_ROOT_PASSWORD -e 'CREATE DATABASE log;'
+            mysql -h 127.0.0.1 -P 3306 -u root --password="${MYSQL_ROOT_PASSWORD}" -e 'CREATE DATABASE promotion;'
+            mysql -h 127.0.0.1 -P 3306 -u root --password="${MYSQL_ROOT_PASSWORD}" -e 'CREATE DATABASE animal;'
+            mysql -h 127.0.0.1 -P 3306 -u root --password="${MYSQL_ROOT_PASSWORD}" -e 'CREATE DATABASE animal_file;'
+            mysql -h 127.0.0.1 -P 3306 -u root --password="${MYSQL_ROOT_PASSWORD}" -e 'CREATE DATABASE log;'
 
         - name: Check databases
           run: mysql -h 127.0.0.1 -P 3306 -u root --password=zxcv1234 -e 'show databases'
