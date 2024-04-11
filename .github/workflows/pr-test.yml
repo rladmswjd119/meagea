@@ -44,11 +44,10 @@ jobs:
       steps:
         - name: Create databases
           run:
-            export MYSQL_PWD="${{ secrets.MYSQL_ROOT_PASSWORD }}"
-            mysql -h 127.0.0.1 -P 3306 -u root -e 'CREATE DATABASE promotion;' &&
-            mysql -h 127.0.0.1 -P 3306 -u root -e 'CREATE DATABASE animal;' &&
-            mysql -h 127.0.0.1 -P 3306 -u root -e 'CREATE DATABASE animal_file;' &&
-            mysql -h 127.0.0.1 -P 3306 -u root -e 'CREATE DATABASE log;'
+            mysql -h 127.0.0.1 -P 3306 -u root -p"${{ secrets.MYSQL_ROOT_PASSWORD }}" -e 'CREATE DATABASE promotion;' &&
+            mysql -h 127.0.0.1 -P 3306 -u root -p"${{ secrets.MYSQL_ROOT_PASSWORD }}" -e 'CREATE DATABASE animal;' &&
+            mysql -h 127.0.0.1 -P 3306 -u root -p"${{ secrets.MYSQL_ROOT_PASSWORD }}" -e 'CREATE DATABASE animal_file;' &&
+            mysql -h 127.0.0.1 -P 3306 -u root -p"${{ secrets.MYSQL_ROOT_PASSWORD }}" -e 'CREATE DATABASE log;'
 
         - name: Check databases
           run: mysql -h 127.0.0.1 -P 3306 -u root --password=zxcv1234 -e 'show databases'
