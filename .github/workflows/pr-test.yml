@@ -39,12 +39,12 @@ jobs:
 #            MYSQL_ROOT_PASSWORD: password
 #          ports:
 #            - 3306:3306
-          options: --health-cmd "mysqladmin ping" --health-interval 10s --health-timeout 5s --health-retries 10
-
-
-      steps:
-        - name: Create databases
-          run: mysql -h 127.0.0.1 -P 3306 -u root --password=password -e 'CREATE DATABASE test_db;'
-
-        - name: Check databases
-          run: mysql -h 127.0.0.1 -P 3306 -u root --password=password -e 'show databases'
+#          options: --health-cmd "mysqladmin ping" --health-interval 10s --health-timeout 5s --health-retries 10
+#
+#
+#      steps:
+#        - name: Create databases
+#          run: mysql -h 127.0.0.1 -P 3306 -u root --password=password -e 'CREATE DATABASE test_db;'
+#
+#        - name: Check databases
+#          run: mysql -h 127.0.0.1 -P 3306 -u root --password=password -e 'show databases'
