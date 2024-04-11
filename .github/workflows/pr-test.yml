@@ -30,21 +30,20 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew build test
 
-#    run-mysql:
-#      runs-on: ubuntu-latest
-#      services:
-#        mysql:
-#          image: mysql:5.7
-#          env:
-#            MYSQL_ROOT_PASSWORD: password
-#          ports:
-#            - 3306:3306
-#          options: --health-cmd "mysqladmin ping" --health-interval 10s --health-timeout 5s --health-retries 10
-#
-#
-#      steps:
-#        - name: Create databases
-#          run: mysql -h 127.0.0.1 -P 3306 -u root --password=password -e 'CREATE DATABASE test_db;'
-#
-#        - name: Check databases
-#          run: mysql -h 127.0.0.1 -P 3306 -u root --password=password -e 'show databases'
+  run-mysql:
+      runs-on: ubuntu-latest
+      services:
+        mysql:
+          image: mysql:5.7
+          env:
+            MYSQL_ROOT_PASSWORD: zxcv1234
+          ports:
+            - 3306:3306
+          options: --health-cmd "mysqladmin ping" --health-interval 10s --health-timeout 5s --health-retries 10
+
+      steps:
+        - name: Create databases
+          run: mysql -h 127.0.0.1 -P 3306 -u root --password=password -e 'CREATE DATABASE test;'
+
+        - name: Check databases
+          run: mysql -h 127.0.0.1 -P 3306 -u root --password=password -e 'show databases'
