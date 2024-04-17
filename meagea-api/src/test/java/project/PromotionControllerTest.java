@@ -32,7 +32,7 @@ public class PromotionControllerTest {
     @Test
     public void 입양_홍보글_생성() {
         MultiValueMap<String, Object> animalMap = new LinkedMultiValueMap<>();
-        animalMap.add("name", "바보쥐");
+        animalMap.add("name", "바보악어");
         animalMap.add("age", 5);
         animalMap.add("gender", "암컷");
         animalMap.add("weight", 3.5);

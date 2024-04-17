@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -68,7 +69,6 @@ public class PromotionService {
         AnimalFile animalFile;
         try {
             MultipartFile m = imageList.get(i);
-            System.out.println("saveAnimalFileAsync: " + m.getOriginalFilename());
             animalFile = new AnimalFile(proNo, m.getOriginalFilename(), fileMan.serverFile(m), FileType.PRO.name());
             fileRepo.save(animalFile);
         } catch (IOException e) {
@@ -78,10 +78,12 @@ public class PromotionService {
         return animalFile;
     }
 
-    public List<AnimalFile> turnAnimalList(AnimalFile file, List<AnimalFile> animalFileList) {
-        animalFileList.add(file);
-        System.out.println("turnAnimalList: " + file.getUploadFileName());
-        return animalFileList;
+    public CompletableFuture<List<AnimalFile>> turnAnimalList(List<CompletableFuture<AnimalFile>> futureList){
+        CompletableFuture<?>[] futureArray = futureList.toArray(new CompletableFuture<?>[0]);
+        CompletableFuture<List<AnimalFile>> animalListFuture = CompletableFuture.allOf(futureArray)
+                .thenApply(i -> futureList.stream().map(CompletableFuture::join).collect(Collectors.toList()));
+
+        return animalListFuture;
     }
 
     public Promotion findPromotionByNo(int no) {
