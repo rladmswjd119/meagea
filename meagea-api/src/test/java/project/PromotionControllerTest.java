@@ -1,6 +1,7 @@
 package project;
 
 import entity.Animal;
+import entity.AnimalFile;
 import entity.Promotion;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +13,16 @@ import org.springframework.http.*;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.multipart.MultipartFile;
 import project.dto.AnimalDto;
 import project.dto.PromotionDetailDto;
 import project.dto.SimplePromotionDto;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -49,7 +53,7 @@ public class PromotionControllerTest {
 
         MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
         map.add("title", "제목");
-        map.add("animalNo", animalRe.getBody().getNo());
+        map.add("animalNo", Objects.requireNonNull(animalRe.getBody()).getNo());
         map.add("introduction", "귀여움");
         map.add("condition", "집 좋아하시는 분");
         for(int i = 0; i < 4; i++) {
@@ -104,7 +108,7 @@ public class PromotionControllerTest {
         String url = "/meagea/promotion/" + proResponseEntity.getBody().getProNo();
         ResponseEntity<PromotionDetailDto> responseEntity = testRestTemplate.getForEntity(url, PromotionDetailDto.class);
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(responseEntity.getBody().getTitle()).isEqualTo("제목");
+        assertThat(Objects.requireNonNull(responseEntity.getBody()).getTitle()).isEqualTo("제목");
         assertThat(responseEntity.getBody().getImageList().size()).isEqualTo(4);
     }
 

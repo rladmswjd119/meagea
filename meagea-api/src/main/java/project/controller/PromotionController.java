@@ -4,6 +4,9 @@ import entity.Animal;
 import entity.AnimalFile;
 import entity.Promotion;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.CacheControl;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.dto.PromotionDetailDto;
 import project.dto.PromotionModifyForm;
@@ -28,18 +31,20 @@ public class PromotionController {
     private final LogService logService;
 
     @PostMapping("/promotion")
-    public PromotionDetailDto addPromotion(@ModelAttribute PromotionForm form) throws Exception {
+    public ResponseEntity<PromotionDetailDto> addPromotion(@ModelAttribute PromotionForm form) throws Exception {
         Promotion pro = proService.savePromotion(form);
         Animal animal = animalService.findAnimalByNo(form.getAnimalNo());
 
         List<CompletableFuture<AnimalFile>> futureAnimalFileList = proService.saveAnimalFile(pro.getNo(), form.getImageList());
         CompletableFuture<List<AnimalFile>> animalListFuture = proService.turnAnimalList(futureAnimalFileList);
 
-        return new PromotionDetailDto(pro.getNo(), pro.getTitle(), pro.getAnimalNo(), pro.getIntroduction(), pro.getTerms(),
-                                    pro.getMakeDate(), pro.getModifyDate(), animal.getName(), animal.getAge(), animal.getGender(),
-                                    animal.getWeight(), animal.isNeuter(), animal.getKind(), animal.getDetail(), animal.getPlace(),
-                                    animal.getHealthState(), animal.getActivity(), animal.getSociality(), animal.getFriendly(),
-                                    animal.isAdoptionState(), animalListFuture.get());
+        PromotionDetailDto promotionDetailDto = new PromotionDetailDto(pro.getNo(), pro.getTitle(), pro.getAnimalNo(), pro.getIntroduction(), pro.getTerms(),
+                                                                        pro.getMakeDate(), pro.getModifyDate(), animal.getName(), animal.getAge(), animal.getGender(),
+                                                                        animal.getWeight(), animal.isNeuter(), animal.getKind(), animal.getDetail(), animal.getPlace(),
+                                                                        animal.getHealthState(), animal.getActivity(), animal.getSociality(), animal.getFriendly(),
+                                                                        animal.isAdoptionState(), animalListFuture.get());
+
+        return ResponseEntity.ok().cacheControl(CacheControl.noCache()).body(promotionDetailDto);
     }
 
     @GetMapping("/promotion/{no}")
@@ -48,6 +53,8 @@ public class PromotionController {
         Animal animal = animalService.findAnimalByNo(pro.getAnimalNo());
         List<AnimalFile> animalFileList = proService.findAllAnimalFIleByPromotionNo(no);
 
+        System.out.println(no);
+        System.out.println(animalFileList.size());
         return new PromotionDetailDto(pro.getNo(), pro.getTitle(), pro.getAnimalNo(), pro.getIntroduction(),
                 pro.getTerms(), pro.getMakeDate(), pro.getModifyDate(),
                 animal.getName(), animal.getAge(), animal.getGender(), animal.getWeight(), animal.isNeuter(),

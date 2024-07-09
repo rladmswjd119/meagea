@@ -80,10 +80,9 @@ public class PromotionService {
 
     public CompletableFuture<List<AnimalFile>> turnAnimalList(List<CompletableFuture<AnimalFile>> futureList){
         CompletableFuture<?>[] futureArray = futureList.toArray(new CompletableFuture<?>[0]);
-        CompletableFuture<List<AnimalFile>> animalListFuture = CompletableFuture.allOf(futureArray)
-                .thenApply(i -> futureList.stream().map(CompletableFuture::join).collect(Collectors.toList()));
 
-        return animalListFuture;
+        return CompletableFuture.allOf(futureArray)
+                .thenApply(i -> futureList.stream().map(CompletableFuture::join).collect(Collectors.toList()));
     }
 
     public Promotion findPromotionByNo(int no) {
@@ -139,7 +138,7 @@ public class PromotionService {
     }
 
     public List<AnimalFile> findAllAnimalFIleByPromotionNo(int no) {
-        return fileRepo.findAllByPromotionNoAndProperty(no, "promotion");
+        return fileRepo.findAllByPromotionNoAndProperty(no, "PRO");
     }
 
     public List<AnimalFile> deleteAnimalFIleListByPromotionNo(int promotionNo) {
