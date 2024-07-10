@@ -7,6 +7,10 @@ import project.dto.AnimalDto;
 import project.dto.AnimalForm;
 import project.service.AnimalService;
 
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/meagea")
@@ -28,5 +32,18 @@ AnimalController {
         return new AnimalDto(animal.getNo(), animal.getName(), animal.getAge(), animal.getGender(), animal.getWeight(),
                 animal.isNeuter(), animal.getKind(), animal.getDetail(), animal.getPlace(), animal.getHealthState(),
                 animal.getActivity(), animal.getSociality(), animal.getFriendly(), animal.isAdoptionState());
+    }
+
+    @DeleteMapping("/animal")
+    public void deleteAllAnimal() {
+        animalService.deleteAll();
+    }
+
+    @GetMapping("/all-animal")
+    public List<AnimalDto> getAllAnimalDto() throws ExecutionException, InterruptedException {
+        List<Animal> animalList = animalService.getAllAnimal();
+        CompletableFuture<List<AnimalDto>> listCompletableFuture = animalService.changeCompletListAnimalDto(animalService.changeListCompletAnimalDtoList(animalList));
+
+        return listCompletableFuture.get();
     }
 }

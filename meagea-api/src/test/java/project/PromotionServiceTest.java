@@ -2,7 +2,6 @@ package project;
 
 
 import entity.Animal;
-import entity.AnimalFile;
 import entity.Promotion;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -25,12 +24,9 @@ import project.service.PromotionService;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.anyInt;

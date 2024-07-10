@@ -53,8 +53,6 @@ public class PromotionController {
         Animal animal = animalService.findAnimalByNo(pro.getAnimalNo());
         List<AnimalFile> animalFileList = proService.findAllAnimalFIleByPromotionNo(no);
 
-        System.out.println(no);
-        System.out.println(animalFileList.size());
         return new PromotionDetailDto(pro.getNo(), pro.getTitle(), pro.getAnimalNo(), pro.getIntroduction(),
                 pro.getTerms(), pro.getMakeDate(), pro.getModifyDate(),
                 animal.getName(), animal.getAge(), animal.getGender(), animal.getWeight(), animal.isNeuter(),
@@ -105,5 +103,10 @@ public class PromotionController {
                 animal.getActivity(), animal.getSociality(), animal.getFriendly(), animal.isAdoptionState(),
                 deleteAnimalFileList);
 
+    }
+
+    @DeleteMapping("/promotion")
+    public void deleteAll(){
+        proService.deleteAll();
     }
 }

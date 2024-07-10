@@ -148,4 +148,10 @@ public class PromotionService {
 
         return deleteAnimalFileList;
     }
+
+    public void deleteAll() {
+        System.out.println("삭제");
+        fileRepo.deleteAllInBatch();
+        proRepo.deleteAllInBatch();
+    }
 }

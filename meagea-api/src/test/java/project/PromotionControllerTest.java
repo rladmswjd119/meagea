@@ -3,6 +3,8 @@ package project;
 import entity.Animal;
 import entity.AnimalFile;
 import entity.Promotion;
+import org.aspectj.lang.annotation.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,6 +16,7 @@ import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.multipart.MultipartFile;
+import project.controller.AnimalController;
 import project.dto.AnimalDto;
 import project.dto.PromotionDetailDto;
 import project.dto.SimplePromotionDto;
@@ -33,10 +36,16 @@ public class PromotionControllerTest {
     @Autowired
     TestRestTemplate testRestTemplate = new TestRestTemplate();
 
+    @BeforeEach
+    public void setUp(){
+        testRestTemplate.delete("/meagea/promotion");
+        testRestTemplate.delete("/meagea/animal");
+    }
+
     @Test
     public void 입양_홍보글_생성() {
         MultiValueMap<String, Object> animalMap = new LinkedMultiValueMap<>();
-        animalMap.add("name", "바보악어");
+        animalMap.add("name", "바보쥐");
         animalMap.add("age", 5);
         animalMap.add("gender", "암컷");
         animalMap.add("weight", 3.5);
