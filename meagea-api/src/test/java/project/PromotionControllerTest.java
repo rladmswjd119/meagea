@@ -36,15 +36,15 @@ public class PromotionControllerTest {
     @Autowired
     TestRestTemplate testRestTemplate = new TestRestTemplate();
 
+    private MultiValueMap<String, Object> animalMap;
+    private MultiValueMap<String, Object> map;
+
     @BeforeEach
     public void setUp(){
         testRestTemplate.delete("/meagea/promotion");
         testRestTemplate.delete("/meagea/animal");
-    }
 
-    @Test
-    public void 입양_홍보글_생성() {
-        MultiValueMap<String, Object> animalMap = new LinkedMultiValueMap<>();
+        animalMap = new LinkedMultiValueMap<>();
         animalMap.add("name", "바보쥐");
         animalMap.add("age", 5);
         animalMap.add("gender", "암컷");
@@ -60,19 +60,21 @@ public class PromotionControllerTest {
         String animalUrl = "/meagea/animal";
         ResponseEntity<AnimalDto> animalRe = testRestTemplate.postForEntity(animalUrl, animalMap, AnimalDto.class);
 
-        MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
+        map = new LinkedMultiValueMap<>();
         map.add("title", "제목");
         map.add("animalNo", Objects.requireNonNull(animalRe.getBody()).getNo());
         map.add("introduction", "귀여움");
         map.add("condition", "집 좋아하시는 분");
         for(int i = 0; i < 4; i++) {
-            // path 경로에 있는 name.type 파일을 File 객체로 생성
             File file = new File("/Users/gim-eunjeong/IdeaProjects/meagea/meagea-api/src/main/java/project/image/"
                     + "file" + i + ".jpg");
             FileSystemResource resource = new FileSystemResource(file);
             map.add("imageList", resource);
         }
+    }
 
+    @Test
+    public void 입양_홍보글_생성() {
         String url = "/meagea/promotion";
         ResponseEntity<PromotionDetailDto> responseEntity = testRestTemplate.postForEntity(url, map, PromotionDetailDto.class);
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -84,35 +86,8 @@ public class PromotionControllerTest {
 
     @Test
     public void 입양_홍보글_특정_조회(){
-        MultiValueMap<String, Object> animalMap = new LinkedMultiValueMap<>();
-        animalMap.add("name", "바보쥐");
-        animalMap.add("age", 5);
-        animalMap.add("gender", "암컷");
-        animalMap.add("weight", 3.5);
-        animalMap.add("neuter", true);
-        animalMap.add("kind", "친칠라");
-        animalMap.add("detail", "믹스");
-        animalMap.add("place", "동네");
-        animalMap.add("healthState", 2);
-        animalMap.add("activity", 1);
-        animalMap.add("sociality", 2);
-        animalMap.add("friendly", 1);
-        String animalUrl = "/meagea/animal";
-        ResponseEntity<AnimalDto> animalRe = testRestTemplate.postForEntity(animalUrl, animalMap, AnimalDto.class);
-
-        MultiValueMap<String, Object> proMap = new LinkedMultiValueMap<>();
-        proMap.add("title", "제목");
-        proMap.add("animalNo", animalRe.getBody().getNo());
-        proMap.add("introduction", "귀여움");
-        proMap.add("condition", "집 좋아하시는 분");
-        for(int i = 0; i < 4; i++) {
-            File file = new File("/Users/gim-eunjeong/IdeaProjects/meagea/meagea-api/src/main/java/project/image/"
-                    + "file" + i + ".jpg");
-            FileSystemResource resource = new FileSystemResource(file);
-            proMap.add("imageList", resource);
-        }
         String proUrl = "/meagea/promotion";
-        ResponseEntity<PromotionDetailDto> proResponseEntity = testRestTemplate.postForEntity(proUrl, proMap, PromotionDetailDto.class);
+        ResponseEntity<PromotionDetailDto> proResponseEntity = testRestTemplate.postForEntity(proUrl, map, PromotionDetailDto.class);
 
         String url = "/meagea/promotion/" + proResponseEntity.getBody().getProNo();
         ResponseEntity<PromotionDetailDto> responseEntity = testRestTemplate.getForEntity(url, PromotionDetailDto.class);
@@ -123,35 +98,8 @@ public class PromotionControllerTest {
 
     @Test
     public void 모든_입양_홍보글_간단_조회(){
-        MultiValueMap<String, Object> animalMap = new LinkedMultiValueMap<>();
-        animalMap.add("name", "바보쥐");
-        animalMap.add("age", 5);
-        animalMap.add("gender", "암컷");
-        animalMap.add("weight", 3.5);
-        animalMap.add("neuter", true);
-        animalMap.add("kind", "친칠라");
-        animalMap.add("detail", "믹스");
-        animalMap.add("place", "동네");
-        animalMap.add("healthState", 2);
-        animalMap.add("activity", 1);
-        animalMap.add("sociality", 2);
-        animalMap.add("friendly", 1);
-        String animalUrl = "/meagea/animal";
-        ResponseEntity<AnimalDto> animalRe = testRestTemplate.postForEntity(animalUrl, animalMap, AnimalDto.class);
-
-        MultiValueMap<String, Object> proMap = new LinkedMultiValueMap<>();
-        proMap.add("title", "제목");
-        proMap.add("animalNo", animalRe.getBody().getNo());
-        proMap.add("introduction", "귀여움");
-        proMap.add("condition", "집 좋아하시는 분");
-        for(int i = 0; i < 4; i++) {
-            File file = new File("/Users/gim-eunjeong/IdeaProjects/meagea/meagea-api/src/main/java/project/image/"
-                    + "file" + i + ".jpg");
-            FileSystemResource resource = new FileSystemResource(file);
-            proMap.add("imageList", resource);
-        }
         String proUrl = "/meagea/promotion";
-        testRestTemplate.postForEntity(proUrl, proMap, PromotionDetailDto.class);
+        testRestTemplate.postForEntity(proUrl, map, PromotionDetailDto.class);
 
         String url = "/meagea/all-promotion-title";
         ResponseEntity<List<SimplePromotionDto>> responseEntity =
@@ -167,35 +115,8 @@ public class PromotionControllerTest {
     public void 홍보글_수정_테스트(){
         testRestTemplate.getRestTemplate().setRequestFactory(new HttpComponentsClientHttpRequestFactory());
 
-        MultiValueMap<String, Object> animalMap = new LinkedMultiValueMap<>();
-        animalMap.add("name", "바보쥐");
-        animalMap.add("age", 5);
-        animalMap.add("gender", "암컷");
-        animalMap.add("weight", 3.5);
-        animalMap.add("neuter", true);
-        animalMap.add("kind", "친칠라");
-        animalMap.add("detail", "믹스");
-        animalMap.add("place", "동네");
-        animalMap.add("healthState", 2);
-        animalMap.add("activity", 1);
-        animalMap.add("sociality", 2);
-        animalMap.add("friendly", 1);
-        String animalUrl = "/meagea/animal";
-        ResponseEntity<AnimalDto> animalRe = testRestTemplate.postForEntity(animalUrl, animalMap, AnimalDto.class);
-
-        MultiValueMap<String, Object> proMap = new LinkedMultiValueMap<>();
-        proMap.add("title", "제목");
-        proMap.add("animalNo", animalRe.getBody().getNo());
-        proMap.add("introduction", "귀여움");
-        proMap.add("condition", "집 좋아하시는 분");
-        for(int i = 0; i < 4; i++) {
-            File file = new File("/Users/gim-eunjeong/IdeaProjects/meagea/meagea-api/src/main/java/project/image/"
-                    + "file" + i + ".jpg");
-            FileSystemResource resource = new FileSystemResource(file);
-            proMap.add("imageList", resource);
-        }
         String proUrl = "/meagea/promotion";
-        ResponseEntity<PromotionDetailDto> proResponseEntity = testRestTemplate.postForEntity(proUrl, proMap, PromotionDetailDto.class);
+        ResponseEntity<PromotionDetailDto> proResponseEntity = testRestTemplate.postForEntity(proUrl, map, PromotionDetailDto.class);
 
         String url = "/meagea/promotion";
         MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
@@ -217,35 +138,8 @@ public class PromotionControllerTest {
 
     @Test
     public void 홍보글_삭제_테스트(){
-        MultiValueMap<String, Object> animalMap = new LinkedMultiValueMap<>();
-        animalMap.add("name", "바보쥐");
-        animalMap.add("age", 5);
-        animalMap.add("gender", "암컷");
-        animalMap.add("weight", 3.5);
-        animalMap.add("neuter", true);
-        animalMap.add("kind", "친칠라");
-        animalMap.add("detail", "믹스");
-        animalMap.add("place", "동네");
-        animalMap.add("healthState", 2);
-        animalMap.add("activity", 1);
-        animalMap.add("sociality", 2);
-        animalMap.add("friendly", 1);
-        String animalUrl = "/meagea/animal";
-        ResponseEntity<AnimalDto> animalRe = testRestTemplate.postForEntity(animalUrl, animalMap, AnimalDto.class);
-
-        MultiValueMap<String, Object> proMap = new LinkedMultiValueMap<>();
-        proMap.add("title", "제목");
-        proMap.add("animalNo", animalRe.getBody().getNo());
-        proMap.add("introduction", "귀여움");
-        proMap.add("condition", "집 좋아하시는 분");
-        for(int i = 0; i < 4; i++) {
-            File file = new File("/Users/gim-eunjeong/IdeaProjects/meagea/meagea-api/src/main/java/project/image/"
-                    + "file" + i + ".jpg");
-            FileSystemResource resource = new FileSystemResource(file);
-            proMap.add("imageList", resource);
-        }
         String proUrl = "/meagea/promotion";
-        ResponseEntity<PromotionDetailDto> proResponseEntity = testRestTemplate.postForEntity(proUrl, proMap, PromotionDetailDto.class);
+        ResponseEntity<PromotionDetailDto> proResponseEntity = testRestTemplate.postForEntity(proUrl, map, PromotionDetailDto.class);
 
         String url = "/meagea/promotion/" + proResponseEntity.getBody().getProNo();
         testRestTemplate.delete(url);
