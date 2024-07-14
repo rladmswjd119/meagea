@@ -40,6 +40,7 @@ public class PromotionService {
         if (animal.isEmpty()) {
             throw new NullPointerException("조회 결과 없음");
         }
+
         return proRepo.save(new Promotion(form.getTitle(), animal.get().getNo(), form.getIntroduction(), form.getCondition()));
     }
 
@@ -150,7 +151,6 @@ public class PromotionService {
     }
 
     public void deleteAll() {
-        System.out.println("삭제");
         fileRepo.deleteAllInBatch();
         proRepo.deleteAllInBatch();
     }

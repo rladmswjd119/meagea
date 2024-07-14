@@ -1,9 +1,5 @@
 package project;
 
-import entity.Animal;
-import entity.AnimalFile;
-import entity.Promotion;
-import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,22 +8,15 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.*;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.multipart.MultipartFile;
-import project.controller.AnimalController;
 import project.dto.AnimalDto;
 import project.dto.PromotionDetailDto;
 import project.dto.SimplePromotionDto;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -36,7 +25,6 @@ public class PromotionControllerTest {
     @Autowired
     TestRestTemplate testRestTemplate = new TestRestTemplate();
 
-    private MultiValueMap<String, Object> animalMap;
     private MultiValueMap<String, Object> map;
 
     @BeforeEach
@@ -44,7 +32,7 @@ public class PromotionControllerTest {
         testRestTemplate.delete("/meagea/promotion");
         testRestTemplate.delete("/meagea/animal");
 
-        animalMap = new LinkedMultiValueMap<>();
+        MultiValueMap<String, Object> animalMap = new LinkedMultiValueMap<>();
         animalMap.add("name", "바보쥐");
         animalMap.add("age", 5);
         animalMap.add("gender", "암컷");
@@ -113,8 +101,6 @@ public class PromotionControllerTest {
 
     @Test
     public void 홍보글_수정_테스트(){
-        testRestTemplate.getRestTemplate().setRequestFactory(new HttpComponentsClientHttpRequestFactory());
-
         String proUrl = "/meagea/promotion";
         ResponseEntity<PromotionDetailDto> proResponseEntity = testRestTemplate.postForEntity(proUrl, map, PromotionDetailDto.class);
 
