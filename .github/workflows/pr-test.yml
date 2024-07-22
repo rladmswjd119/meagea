@@ -21,7 +21,7 @@ jobs:
         with:
           mysql database: 'meagea'
           mysql user: 'root'
-          mysql password: 'zxcv1234'
+          mysql password: '1234'
 
       # Gradle wrapper 파일 실행 권한주기
       - name: Grant execute permission for gradlew
@@ -38,7 +38,7 @@ jobs:
           env:
             MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
           ports:
-            - 3306:3306
+            - 3306:3305
           options: --health-cmd "mysqladmin ping" --health-interval 10s --health-timeout 5s --health-retries 10
 
       steps:
