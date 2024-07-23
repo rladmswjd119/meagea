@@ -14,8 +14,8 @@ jobs:
         image: mysql:latest
         env:
           MYSQL_DATABASE: 'docker_meagea'
-          MYSQL_USER: 'root'
-          MYSQL_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
+#          MYSQL_USER: 'root'
+          MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
         ports:
           - 3306:3305
 
