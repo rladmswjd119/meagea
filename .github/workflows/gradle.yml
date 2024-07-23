@@ -11,7 +11,7 @@ jobs:
 
     services:
       mysql:
-        image: mysql:letest
+        image: mysql:latest
         env:
           MYSQL_DATABASE: 'docker_meagea'
           MYSQL_USER: 'root'
