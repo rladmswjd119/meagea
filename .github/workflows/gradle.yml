@@ -9,6 +9,16 @@ jobs:
     permissions:
       contents: read
 
+    services:
+      mysql:
+        image: mysql:letest
+        env:
+          MYSQL_DATABASE: 'docker_meagea'
+          MYSQL_USER: 'root'
+          MYSQL_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
+        ports:
+          - 3306:2205
+
     steps:
       - uses: actions/checkout@v4
       - name: Set up JDK 17
@@ -16,14 +26,6 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-
-      - name: Set up mysql
-        uses: mirromutth/mysql-action@v1.1
-        with:
-          host port: 3306
-          container port: 3305
-          mysql database: 'docker_meagea'
-          mysql root password: ${{ secrets.MYSQL_ROOT_PASSWORD }}
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
