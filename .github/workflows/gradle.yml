@@ -17,7 +17,7 @@ jobs:
 #          MYSQL_USER: 'root'
           MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
         ports:
-          - 3306:3305
+          - 3305:3306
 
     steps:
       - uses: actions/checkout@v4
