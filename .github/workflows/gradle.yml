@@ -16,6 +16,7 @@ jobs:
           MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
         ports:
           - 3305:3306
+
     steps:
       - uses: actions/checkout@v4
       - name: Set up JDK 17
@@ -29,3 +30,4 @@ jobs:
 
       - name: Build with Gradle Wrapper
         run: ./gradlew build
+
