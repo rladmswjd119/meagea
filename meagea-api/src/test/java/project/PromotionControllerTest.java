@@ -108,9 +108,7 @@ public class PromotionControllerTest {
         map.add("no", proResponseEntity.getBody().getProNo());
         map.add("title", "수정된 제목");
         for(int i = 0; i < 4; i++) {
-            File file = new File("/Users/gim-eunjeong/IdeaProjects/meagea/meagea-api/src/main/java/project/image/"
-                    + "file" + i + ".jpg");
-            FileSystemResource resource = new FileSystemResource(file);
+            ClassPathResource resource = new ClassPathResource("file" + i + ".jpg");
             map.add("imageList", resource);
         }
         map.add("introduction", "수정된 설명");
