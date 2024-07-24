@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.*;
 import org.springframework.util.LinkedMultiValueMap;
@@ -54,9 +55,7 @@ public class PromotionControllerTest {
         map.add("introduction", "귀여움");
         map.add("condition", "집 좋아하시는 분");
         for(int i = 0; i < 4; i++) {
-            File file = new File("/Users/gim-eunjeong/IdeaProjects/meagea/meagea-api/src/main/java/project/image/"
-                    + "file" + i + ".jpg");
-            FileSystemResource resource = new FileSystemResource(file);
+            ClassPathResource resource = new ClassPathResource("file" + i + ".jpg");
             map.add("imageList", resource);
         }
     }
@@ -109,9 +108,7 @@ public class PromotionControllerTest {
         map.add("no", proResponseEntity.getBody().getProNo());
         map.add("title", "수정된 제목");
         for(int i = 0; i < 4; i++) {
-            File file = new File("/Users/gim-eunjeong/IdeaProjects/meagea/meagea-api/src/main/java/project/image/"
-                    + "file" + i + ".jpg");
-            FileSystemResource resource = new FileSystemResource(file);
+            ClassPathResource resource = new ClassPathResource("file" + i + ".jpg");
             map.add("imageList", resource);
         }
         map.add("introduction", "수정된 설명");
