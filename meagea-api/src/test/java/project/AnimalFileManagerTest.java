@@ -8,11 +8,13 @@ import project.unit.AnimalFileManager;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 public class AnimalFileManagerTest {
 
     @Test
-    public void 유기동물_이미지_관리() throws IOException {
+    public void 유기동물_이미지_관리() throws IOException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         AnimalFileManager fileMan = new AnimalFileManager();
 
         for (int i = 0; i < 4; i++) {
