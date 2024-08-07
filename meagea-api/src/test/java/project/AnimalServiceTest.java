@@ -33,11 +33,10 @@ public class AnimalServiceTest {
     @BeforeEach
     public void setUp(){
         animalCap = ArgumentCaptor.forClass(Animal.class);
-        Animal animal = mock(Animal.class);
         form = new AnimalForm("뽀또", 5, "수컷", 3.5, true, "고양이",
                 "치즈", "공사장", 3, 4, 5, 5);
-        given(aniRepo.save(animalCap.capture())).willReturn(animal);
         animalService.addAnimal(form);
+        verify(aniRepo).save(animalCap.capture());
     }
 
     @Test
