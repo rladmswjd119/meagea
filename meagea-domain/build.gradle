@@ -19,6 +19,6 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
 }
 
-//tasks.withType(BootJar).configureEach {
-//    enabled = false
-//}
+tasks.withType(BootJar).configureEach {
+    enabled = false
+}
