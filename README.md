@@ -33,15 +33,17 @@
 ## API 명세서
 | 대분류 | 기능 | Http Method | API Path |
 | --- | --- | --- | --- |
-| 동물 | 추가 | Http Method | API Path |
-| 동물 | 조회 | Http Method | API Path |
-| 동물 | 삭제| Http Method | API Path |
-| 동물 | 전체 조회 | Http Method | API Path |
-| 홍보글 | 추가 | Http Method | API Path | 
-| 홍보글 | 조회 | Http Method | API Path |
-| 홍보글 | 수정| Http Method | API Path |
-| 홍보글 | 전체 조회 | Http Method | API Path |
-| 홍보글 | 삭제| Http Method | API Path |
+| 동물 | 추가 | POST | /meagea/animals |
+| 동물 | 조회 | GET | /meagea/animals/{no} |
+| 동물 | 전체 삭제| DELETE | /meagea/animals |
+| 동물 | 전체 조회 | GET | /meagea/animals |
+| 홍보글 | 추가 | POST | /meagea/promotions | 
+| 홍보글 | 조회 | GET | /meagea/promotions/{no} |
+| 홍보글 | 수정| PATCH | /meagea/promotions |
+| 홍보글 | 전체 조회 | GET | /meagea/promotions |
+| 홍보글 | 삭제| DELETE | API /meagea/promotions |
+| 로그 | 조회| GET | /meagea/logs |
+| 로그 | 전체 조회 | GET | /meagea/logs |
 
 
 </br>
