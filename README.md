@@ -31,8 +31,17 @@
 </br>
 
 ## API 명세서
-| 대분류 | 기능 | Http Method | API Path | 토큰 검증 여부 | 
-| --- | --- | --- | --- | --- |
+| 대분류 | 기능 | Http Method | API Path |
+| --- | --- | --- | --- |
+| 동물 | 추가 | Http Method | API Path |
+| 동물 | 조회 | Http Method | API Path |
+| 동물 | 삭제| Http Method | API Path |
+| 동물 | 전체 조회 | Http Method | API Path |
+| 홍보글 | 추가 | Http Method | API Path | 
+| 홍보글 | 조회 | Http Method | API Path |
+| 홍보글 | 수정| Http Method | API Path |
+| 홍보글 | 전체 조회 | Http Method | API Path |
+| 홍보글 | 삭제| Http Method | API Path |
 
 
 </br>
