@@ -1,4 +1,4 @@
-package project;
+package project.service;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.core.io.ClassPathResource;

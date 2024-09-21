@@ -1,4 +1,4 @@
-package project;
+package project.controller;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,17 +18,17 @@ import java.lang.reflect.Method;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@TestPropertySource(locations = "classpath:application.yml")
 public class AnimalControllerTest {
+
     @Autowired
-    TestRestTemplate testRestTemplate = new TestRestTemplate();
+    public TestRestTemplate testRestTemplate;
 
     private MultiValueMap<String, Object> map;
 
     @BeforeEach
     public void setUp(){
-        testRestTemplate.delete("/meagea/promotions");
-        testRestTemplate.delete("/meagea/animals");
+        testRestTemplate.delete("/meagea/promotions/");
+        testRestTemplate.delete("/meagea/animals/");
 
         map = new LinkedMultiValueMap<>();
         map.add("name", "후드");
@@ -61,7 +61,7 @@ public class AnimalControllerTest {
 
     @Test
     public void 유기동물_조회_테스트(){
-        ResponseEntity<AnimalDto> animalRe = testRestTemplate.postForEntity("/meagea/animals", map, AnimalDto.class);
+        ResponseEntity<AnimalDto> animalRe = testRestTemplate.postForEntity("/meagea/animals/", map, AnimalDto.class);
 
         String url = "/meagea/animals/" + animalRe.getBody().getNo();
         AnimalDto animal = testRestTemplate.getForEntity(url, AnimalDto.class).getBody();
