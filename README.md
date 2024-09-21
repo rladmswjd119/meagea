@@ -42,7 +42,7 @@
 | 홍보글 | 수정| PATCH | /meagea/promotions |
 | 홍보글 | 전체 조회 | GET | /meagea/promotions |
 | 홍보글 | 삭제| DELETE | API /meagea/promotions |
-| 로그 | 조회| GET | /meagea/logs |
+| 로그 | 추가| POST | /meagea/logs |
 | 로그 | 전체 조회 | GET | /meagea/logs |
 
 
