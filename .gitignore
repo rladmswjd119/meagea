@@ -33,3 +33,6 @@ out/
 
 ### VS Code ###
 .vscode/
+
+meagea-api/src/main/resources/.env
+

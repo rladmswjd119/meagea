@@ -10,6 +10,8 @@ public interface AnimalFileRepository extends JpaRepository<AnimalFile, Integer>
     List<AnimalFile> findAllByLogNo(int logNo);
     List<AnimalFile> findAllByPromotionNo(int promotionNo);
 
-    void deleteByPromotionNo(int promotionNo);
+    void deleteAllByPromotionNo(int promotionNo);
+    void deleteAllByLogNo(int logNo);
 
+    void deleteByPromotionNo(int proNo);
 }

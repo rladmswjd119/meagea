@@ -8,7 +8,6 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 
 @Getter
-@Setter
 @Entity
 @Table(name = "promotion")
 @NoArgsConstructor
@@ -34,4 +33,15 @@ public class Promotion {
     private LocalDateTime makeDate;
     private LocalDateTime modifyDate;
     private int remove;
+
+    public void deletePromotion() {
+        this.remove = 1;
+    }
+
+    public void modifyPromotion(String title, String introduction, String terms) {
+        this.title = title;
+        this.introduction = introduction;
+        this.terms = terms;
+        this.modifyDate = LocalDateTime.now();
+    }
 }

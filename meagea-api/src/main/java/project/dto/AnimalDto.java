@@ -16,7 +16,6 @@ public class AnimalDto {
     private double weight;
     private boolean neuter;
     private String kind;
-    private String detail;
     private String place;
     private int healthState;
     private int activity;

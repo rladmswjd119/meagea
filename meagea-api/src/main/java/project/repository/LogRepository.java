@@ -8,5 +8,6 @@ import java.util.List;
 
 @Repository
 public interface LogRepository extends JpaRepository<Log, Integer> {
-    List<Log> findAllByPromotionNoAndRemove(int promotionNo, int remove);
+    List<Log> findAllByPromotionNoOrderByMakeDate(int promotionNo);
+    List<Log> findAllByPromotionNo(int promotionNo);
 }
