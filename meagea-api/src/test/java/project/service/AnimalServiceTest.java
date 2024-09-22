@@ -1,4 +1,4 @@
-package project;
+package project.service;
 
 import entity.Animal;
 import org.junit.jupiter.api.BeforeEach;

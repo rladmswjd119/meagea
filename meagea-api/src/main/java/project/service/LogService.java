@@ -4,17 +4,16 @@ import entity.AnimalFile;
 import entity.Log;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.transaction.annotation.Transactional;
 import project.dto.LogForm;
-import project.dto.LogTatalDto;
-import project.dto.PromotionDetailDto;
+import project.dto.LogTotalDto;
 import project.repository.AnimalFileRepository;
 import project.repository.LogRepository;
-import project.unit.AnimalFileManager;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -22,44 +21,57 @@ public class LogService {
     final private LogRepository logRepo;
     final private AnimalFileRepository fileRepo;
 
-    public void addLog(LogForm form) throws IOException {
+    public Log addLog(LogForm form) {
+
         Log log = new Log(form.getPromotionNo(), form.getBody());
-        logRepo.save(log);
-
-        List<AnimalFile> imageList = new ArrayList<>();
-        for(MultipartFile image : form.getImageList()){
-            AnimalFileManager aniMan = new AnimalFileManager();
-            String serverFileName = aniMan.serverFile(image);
-            AnimalFile animalFile = new AnimalFile(form.getPromotionNo(), image.getOriginalFilename(), serverFileName, "log");
-            imageList.add(fileRepo.save(animalFile));
-        }
-    }
-
-    public List<LogTatalDto> getAllLogByPromotionNo(int promotionNo) {
-        List<LogTatalDto> dtoList = new ArrayList<>();
-        List<Log> logList = logRepo.findAllByPromotionNoAndRemove(promotionNo, 0);
-        for(Log log : logList) {
-            List<AnimalFile> animalFileList = fileRepo.findAllByLogNo(log.getNo());
-            LogTatalDto dto = new LogTatalDto(log.getPromotionNo(), log.getBody(), log.getMakeDate(), animalFileList);
-            dtoList.add(dto);
+        if(form.getBody() == null) {
+            System.out.println("예외!");
+            throw new RuntimeException("Log 내용이 비어있습니다.");
         }
 
-        return dtoList;
+        return logRepo.save(log);
     }
 
+    public List<Log> getAllLogByPromotionNo(int promotionNo) {
+        System.out.println("DB에서 조회");
+        return logRepo.findAllByPromotionNoOrderByMakeDate(promotionNo);
+    }
+
+    @Transactional(rollbackFor={Exception.class})
     public List<Log> deletAllLogByPromotionNo(int promotionNo) {
-        List<Log> logList = logRepo.findAllByPromotionNoAndRemove(promotionNo, 0);
+        List<Log> logList = logRepo.findAllByPromotionNo(promotionNo);
         try {
             if(!logList.isEmpty()){
-                logList.forEach(log -> log.setRemove(1));
-                logRepo.saveAll(logList);
+                logRepo.deleteAll(logList);
+                fileRepo.deleteAllByPromotionNo(promotionNo);
             }
         } catch (Exception ex) {
-            List<AnimalFile> animalFileList = fileRepo.findAllByPromotionNo(promotionNo);
-            animalFileList.forEach(file -> file.setRemove(0));
-            fileRepo.saveAll(animalFileList);
             throw new RuntimeException("홍보글 삭제가 취소되었습니다.");
         }
         return logList;
+    }
+
+    public List<CompletableFuture<LogTotalDto>> changeListComLogDto(List<Log> logList) {
+        List<CompletableFuture<LogTotalDto>> logTotalDtoList = new ArrayList<>();
+        for(Log log : logList) {
+            logTotalDtoList.add(CompletableFuture.supplyAsync(() -> asyncChangeLogDto(log)));
+        }
+        return logTotalDtoList;
+    }
+
+    private LogTotalDto asyncChangeLogDto(Log log) {
+        List<AnimalFile> animalFileList = fileRepo.findAllByLogNo(log.getNo());
+
+        return new LogTotalDto(log.getPromotionNo(), log.getBody(), log.getMakeDate(), animalFileList);
+    }
+
+    public CompletableFuture<List<LogTotalDto>> changeComListLogDto(List<CompletableFuture<LogTotalDto>> listComLogDto) {
+        CompletableFuture<?>[] array = listComLogDto.toArray(new CompletableFuture<?>[0]);
+        return CompletableFuture.allOf(array)
+                                .thenApply(i -> listComLogDto.stream().map(CompletableFuture::join).collect(Collectors.toList()));
+    }
+
+    public void deletAllLog() {
+        logRepo.deleteAll();
     }
 }

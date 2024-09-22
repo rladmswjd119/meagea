@@ -21,7 +21,7 @@ public class AnimalService {
 
     public Animal addAnimal(AnimalForm form){
         Animal animal = new Animal(form.getName(), form.getAge(), form.getGender(), form.getWeight(),
-                                    form.isNeuter(), form.getKind(), form.getDetail(),form.getPlace(), form.getHealthState(),
+                                    form.isNeuter(), form.getKind(),form.getPlace(), form.getHealthState(),
                                     form.getActivity(), form.getSociality(), form.getFriendly());
 
         return animalRepo.save(animal);
@@ -55,7 +55,7 @@ public class AnimalService {
 
     private AnimalDto asyncChangeAnimalDto(Animal animal) {
         return  new AnimalDto(animal.getNo(), animal.getName(), animal.getAge(), animal.getGender(), animal.getWeight()
-                                            , animal.isNeuter(), animal.getKind(), animal.getDetail(), animal.getPlace(), animal.getHealthState()
+                                            , animal.isNeuter(), animal.getKind(), animal.getPlace(), animal.getHealthState()
                                             , animal.getActivity(), animal.getSociality(), animal.getFriendly(), animal.isAdoptionState());
     }
 

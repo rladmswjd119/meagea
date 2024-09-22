@@ -2,19 +2,19 @@ package project.controller;
 
 import entity.Animal;
 import entity.AnimalFile;
+import entity.Log;
 import entity.Promotion;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.CacheControl;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import project.dto.PromotionDetailDto;
-import project.dto.PromotionModifyForm;
+import project.dto.*;
+import project.eunm.FileType;
 import project.service.AnimalService;
 import project.service.LogService;
 import project.service.PromotionService;
-import project.dto.PromotionForm;
-import project.dto.SimplePromotionDto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,45 +23,48 @@ import java.util.concurrent.CompletableFuture;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/meagea")
+@RequestMapping("/meagea/promotions")
 public class PromotionController {
 
     private final PromotionService proService;
     private final AnimalService animalService;
     private final LogService logService;
 
-    @PostMapping("/promotion")
+    @PostMapping("/")
     public ResponseEntity<PromotionDetailDto> addPromotion(@ModelAttribute PromotionForm form) throws Exception {
         Promotion pro = proService.savePromotion(form);
         Animal animal = animalService.findAnimalByNo(form.getAnimalNo());
 
-        List<CompletableFuture<AnimalFile>> futureAnimalFileList = proService.saveAnimalFile(pro.getNo(), form.getImageList());
+        List<CompletableFuture<AnimalFile>> futureAnimalFileList = proService.saveAnimalFile(pro.getNo(), form.getImageList(), -1, FileType.PRO);
         CompletableFuture<List<AnimalFile>> animalListFuture = proService.turnAnimalList(futureAnimalFileList);
 
         PromotionDetailDto promotionDetailDto = new PromotionDetailDto(pro.getNo(), pro.getTitle(), pro.getAnimalNo(), pro.getIntroduction(), pro.getTerms(),
                                                                         pro.getMakeDate(), pro.getModifyDate(), animal.getName(), animal.getAge(), animal.getGender(),
-                                                                        animal.getWeight(), animal.isNeuter(), animal.getKind(), animal.getDetail(), animal.getPlace(),
+                                                                        animal.getWeight(), animal.isNeuter(), animal.getKind(), animal.getPlace(),
                                                                         animal.getHealthState(), animal.getActivity(), animal.getSociality(), animal.getFriendly(),
                                                                         animal.isAdoptionState(), animalListFuture.get());
 
         return ResponseEntity.ok().cacheControl(CacheControl.noCache()).body(promotionDetailDto);
     }
 
-    @GetMapping("/promotion/{no}")
+    @GetMapping("/{no}")
     public PromotionDetailDto getPromotion(@PathVariable int no) {
         Promotion pro = proService.findPromotionByNo(no);
         Animal animal = animalService.findAnimalByNo(pro.getAnimalNo());
-        List<AnimalFile> animalFileList = proService.findAllAnimalFIleByPromotionNo(no);
+        List<AnimalFile> animalFileList = proService.findAllAnimalFileByPromotionNo(no);
+
+        List<Log> logList = logService.getAllLogByPromotionNo(pro.getNo());
+        List<LogTotalDto> logTotalDtoList = logService.changeComListLogDto(logService.changeListComLogDto(logList)).join();
 
         return new PromotionDetailDto(pro.getNo(), pro.getTitle(), pro.getAnimalNo(), pro.getIntroduction(),
                 pro.getTerms(), pro.getMakeDate(), pro.getModifyDate(),
                 animal.getName(), animal.getAge(), animal.getGender(), animal.getWeight(), animal.isNeuter(),
-                animal.getKind(), animal.getDetail(), animal.getPlace(), animal.getHealthState(),
+                animal.getKind(), animal.getPlace(), animal.getHealthState(),
                 animal.getActivity(), animal.getSociality(), animal.getFriendly(), animal.isAdoptionState(),
-                animalFileList);
+                animalFileList, logTotalDtoList);
     }
 
-    @GetMapping("/all-promotion-title")
+    @GetMapping("/")
     public List<SimplePromotionDto> getAllPromotionTitle() {
         List<Promotion> proList = proService.findAllPromotion();
         List<SimplePromotionDto> simpleList = new ArrayList<>();
@@ -75,37 +78,21 @@ public class PromotionController {
         return simpleList;
     }
 
-    @PatchMapping("/promotion")
+    @PatchMapping("/")
     public PromotionDetailDto modifyPromotion(@ModelAttribute PromotionModifyForm modifyDto) {
         Promotion modifyPro = proService.updatePromotion(modifyDto);
         Animal animal = animalService.findAnimalByNo(modifyPro.getAnimalNo());
-        List<AnimalFile> animalFileList = proService.findAllAnimalFIleByPromotionNo(modifyPro.getNo());
+        List<AnimalFile> animalFileList = proService.findAllAnimalFileByPromotionNo(modifyPro.getNo());
 
         return new PromotionDetailDto(modifyPro.getNo(), modifyPro.getTitle(), modifyPro.getAnimalNo(),
                 modifyPro.getIntroduction(), modifyPro.getTerms(), modifyPro.getMakeDate(), modifyPro.getModifyDate(),
                 animal.getName(), animal.getAge(), animal.getGender(), animal.getWeight(), animal.isNeuter(),
-                animal.getKind(), animal.getDetail(), animal.getPlace(), animal.getHealthState(),
+                animal.getKind(), animal.getPlace(), animal.getHealthState(),
                 animal.getActivity(), animal.getSociality(), animal.getFriendly(), animal.isAdoptionState(),
                 animalFileList);
     }
 
-    @DeleteMapping("/promotion/{no}")
-    public PromotionDetailDto deletePromotion(@PathVariable int no) {
-        List<AnimalFile> deleteAnimalFileList = proService.deleteAnimalFIleListByPromotionNo(no);
-        logService.deletAllLogByPromotionNo(no);
-        Promotion deletePro = proService.deletePromotion(no);
-        Animal animal = animalService.findAnimalByNo(deletePro.getAnimalNo());
-
-        return new PromotionDetailDto(deletePro.getNo(), deletePro.getTitle(), deletePro.getAnimalNo(),
-                deletePro.getIntroduction(), deletePro.getTerms(), deletePro.getMakeDate(), deletePro.getModifyDate(),
-                animal.getName(), animal.getAge(), animal.getGender(), animal.getWeight(), animal.isNeuter(),
-                animal.getKind(), animal.getDetail(), animal.getPlace(), animal.getHealthState(),
-                animal.getActivity(), animal.getSociality(), animal.getFriendly(), animal.isAdoptionState(),
-                deleteAnimalFileList);
-
-    }
-
-    @DeleteMapping("/promotion")
+    @DeleteMapping("/")
     public void deleteAll(){
         proService.deleteAll();
     }

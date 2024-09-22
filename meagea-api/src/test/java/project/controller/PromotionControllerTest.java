@@ -1,4 +1,4 @@
-package project;
+package project.controller;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -7,7 +7,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.*;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -15,7 +14,6 @@ import project.dto.AnimalDto;
 import project.dto.PromotionDetailDto;
 import project.dto.SimplePromotionDto;
 
-import java.io.File;
 import java.util.List;
 import java.util.Objects;
 
@@ -24,15 +22,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class PromotionControllerTest {
     @Autowired
-    TestRestTemplate testRestTemplate = new TestRestTemplate();
+    public TestRestTemplate testRestTemplate;
 
     private MultiValueMap<String, Object> map;
 
-    @BeforeEach
+   @BeforeEach
     public void setUp(){
-        testRestTemplate.delete("/meagea/promotion");
-        testRestTemplate.delete("/meagea/animal");
-
         MultiValueMap<String, Object> animalMap = new LinkedMultiValueMap<>();
         animalMap.add("name", "바보쥐");
         animalMap.add("age", 5);
@@ -40,13 +35,12 @@ public class PromotionControllerTest {
         animalMap.add("weight", 3.5);
         animalMap.add("neuter", true);
         animalMap.add("kind", "친칠라");
-        animalMap.add("detail", "믹스");
         animalMap.add("place", "동네");
         animalMap.add("healthState", 2);
         animalMap.add("activity", 1);
         animalMap.add("sociality", 2);
         animalMap.add("friendly", 1);
-        String animalUrl = "/meagea/animal";
+        String animalUrl = "/meagea/animals/";
         ResponseEntity<AnimalDto> animalRe = testRestTemplate.postForEntity(animalUrl, animalMap, AnimalDto.class);
 
         map = new LinkedMultiValueMap<>();
@@ -62,33 +56,35 @@ public class PromotionControllerTest {
 
     @Test
     public void 입양_홍보글_생성() {
-        String url = "/meagea/promotion";
+        String url = "/meagea/promotions/";
         ResponseEntity<PromotionDetailDto> responseEntity = testRestTemplate.postForEntity(url, map, PromotionDetailDto.class);
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         PromotionDetailDto detailDto = responseEntity.getBody();
         assertThat(detailDto.getIntroduction()).isEqualTo("귀여움");
-        assertThat(detailDto.getImageList().size()).isEqualTo(4);
+        assertThat(detailDto.getProImageList().size()).isEqualTo(4);
     }
 
 
     @Test
     public void 입양_홍보글_특정_조회(){
-        String proUrl = "/meagea/promotion";
-        ResponseEntity<PromotionDetailDto> proResponseEntity = testRestTemplate.postForEntity(proUrl, map, PromotionDetailDto.class);
+       String proUrl = "/meagea/promotions/";
+       ResponseEntity<PromotionDetailDto> proResponseEntity = testRestTemplate.postForEntity(proUrl, map, PromotionDetailDto.class);
+       PromotionDetailDto promotionDetailDto = proResponseEntity.getBody();
 
-        String url = "/meagea/promotion/" + proResponseEntity.getBody().getProNo();
-        ResponseEntity<PromotionDetailDto> responseEntity = testRestTemplate.getForEntity(url, PromotionDetailDto.class);
-        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(Objects.requireNonNull(responseEntity.getBody()).getTitle()).isEqualTo("제목");
-        assertThat(responseEntity.getBody().getImageList().size()).isEqualTo(4);
+       String url = "/meagea/promotions/" + promotionDetailDto.getProNo();
+       ResponseEntity<PromotionDetailDto> responseEntity = testRestTemplate.getForEntity(url, PromotionDetailDto.class);
+       PromotionDetailDto dto = responseEntity.getBody();
+
+       assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+       assertThat(Objects.requireNonNull(dto).getTitle()).isEqualTo("제목");
+       assertThat(dto.getProImageList().size()).isEqualTo(4);
     }
 
     @Test
     public void 모든_입양_홍보글_간단_조회(){
-        String proUrl = "/meagea/promotion";
-        testRestTemplate.postForEntity(proUrl, map, PromotionDetailDto.class);
+        String url = "/meagea/promotions/";
+        testRestTemplate.postForEntity(url, map, PromotionDetailDto.class);
 
-        String url = "/meagea/all-promotion-title";
         ResponseEntity<List<SimplePromotionDto>> responseEntity =
                 testRestTemplate.exchange(url, HttpMethod.GET, null,
                 new ParameterizedTypeReference<>() {});
@@ -100,10 +96,10 @@ public class PromotionControllerTest {
 
     @Test
     public void 홍보글_수정_테스트(){
-        String proUrl = "/meagea/promotion";
+        String proUrl = "/meagea/promotions/";
         ResponseEntity<PromotionDetailDto> proResponseEntity = testRestTemplate.postForEntity(proUrl, map, PromotionDetailDto.class);
 
-        String url = "/meagea/promotion";
+        String url = "/meagea/promotions/";
         MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
         map.add("no", proResponseEntity.getBody().getProNo());
         map.add("title", "수정된 제목");
@@ -121,10 +117,10 @@ public class PromotionControllerTest {
 
     @Test
     public void 홍보글_삭제_테스트(){
-        String proUrl = "/meagea/promotion";
+        String proUrl = "/meagea/promotions/";
         ResponseEntity<PromotionDetailDto> proResponseEntity = testRestTemplate.postForEntity(proUrl, map, PromotionDetailDto.class);
 
-        String url = "/meagea/promotion/" + proResponseEntity.getBody().getProNo();
+        String url = "/meagea/promotions/" + proResponseEntity.getBody().getProNo();
         testRestTemplate.delete(url);
     }
 }

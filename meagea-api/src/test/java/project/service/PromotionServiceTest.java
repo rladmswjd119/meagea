@@ -1,4 +1,4 @@
-package project;
+package project.service;
 
 
 import entity.Animal;
@@ -22,7 +22,6 @@ import project.repository.PromotionRepository;
 import project.service.PromotionService;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -62,7 +61,7 @@ public class PromotionServiceTest {
     }
 
     @Test
-    public void savePromotionSuccessTest() throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
+    public void savePromotionSuccessTest()  {
         Promotion pro = proCaptor.getValue();
 
         verify(animalRepo, times(1)).findById(pro.getAnimalNo());
