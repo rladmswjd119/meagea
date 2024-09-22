@@ -3,6 +3,8 @@ package project.controller;
 import entity.Animal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import lombok.extern.slf4j.Slf4j;
 import project.dto.AnimalDto;
 import project.dto.AnimalForm;
 import project.service.AnimalService;
@@ -11,6 +13,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/meagea/animals")
@@ -19,7 +22,9 @@ AnimalController {
     private final AnimalService animalService;
 
     @PostMapping("/")
-    public AnimalDto addAnimal(@ModelAttribute AnimalForm form){
+    public AnimalDto addAnimal(@RequestBody AnimalForm form){
+        log.info("form : {}", form.getName());
+
         Animal animal = animalService.addAnimal(form);
         return new AnimalDto(animal.getNo(), animal.getName(), animal.getAge(), animal.getGender(), animal.getWeight(),
                 animal.isNeuter(), animal.getKind(), animal.getPlace(), animal.getHealthState(),

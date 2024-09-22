@@ -7,16 +7,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.*;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import project.dto.AnimalDto;
-import project.dto.LogTotalDto;
 import project.dto.PromotionDetailDto;
 import project.dto.SimplePromotionDto;
 
-import java.io.File;
 import java.util.List;
 import java.util.Objects;
 
@@ -25,15 +22,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class PromotionControllerTest {
     @Autowired
-    TestRestTemplate testRestTemplate = new TestRestTemplate();
+    public TestRestTemplate testRestTemplate;
 
     private MultiValueMap<String, Object> map;
 
    @BeforeEach
     public void setUp(){
-        testRestTemplate.delete("/meagea/promotions/");
-        testRestTemplate.delete("/meagea/animals/");
-
         MultiValueMap<String, Object> animalMap = new LinkedMultiValueMap<>();
         animalMap.add("name", "바보쥐");
         animalMap.add("age", 5);

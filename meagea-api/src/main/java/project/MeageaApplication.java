@@ -7,7 +7,6 @@ import org.springframework.cache.annotation.EnableCaching;
 
 @SpringBootApplication
 @EntityScan(basePackages = "entity")
-//@EnableCaching
 public class MeageaApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(MeageaApplication.class, args);
