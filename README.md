@@ -159,7 +159,7 @@
 
 ## 트러블 슈팅
 
-<details><summary>MultipartFile 
+<details><summary>이미지 업로드 구현 테스트 코드
 </summary>
 
 **Situation**
