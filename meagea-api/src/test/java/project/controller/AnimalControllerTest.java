@@ -12,6 +12,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import project.dto.AnimalDto;
+import project.dto.AnimalForm;
 
 
 import java.lang.reflect.Method;
@@ -24,25 +25,26 @@ public class AnimalControllerTest {
     @Autowired
     public TestRestTemplate testRestTemplate;
 
-    private MultiValueMap<String, Object> map;
+    private AnimalForm form;
 
     @BeforeEach
     public void setUp(){
         testRestTemplate.delete("/meagea/promotions/");
         testRestTemplate.delete("/meagea/animals/");
 
-        map = new LinkedMultiValueMap<>();
-        map.add("name", "후드");
-        map.add("age", 4);
-        map.add("gender", "암컷");
-        map.add("weight", 3.5);
-        map.add("neuter", true);
-        map.add("kind", "나몰빼미");
-        map.add("place", "블룸베리 아카데미");
-        map.add("healthState", 2);
-        map.add("activity", 1);
-        map.add("sociality", 2);
-        map.add("friendly", 1);
+        form = AnimalForm.builder()
+                .name("후드")
+                .age(4)
+                .gender("암컷")
+                .weight(3.5)
+                .neuter(true)
+                .kind("나몰빼미")
+                .place("블루베리 아카데미")
+                .healthState(2)
+                .activity(3)
+                .sociality(2)
+                .friendly(1)
+                .build();
 
     }
 
@@ -52,7 +54,7 @@ public class AnimalControllerTest {
         String url = "/meagea/animals/";
 
         //when
-        ResponseEntity<AnimalDto> animalRe = testRestTemplate.postForEntity(url, map, AnimalDto.class);
+        ResponseEntity<AnimalDto> animalRe = testRestTemplate.postForEntity(url, form, AnimalDto.class);
 
         //then
         assertThat(animalRe.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -62,7 +64,7 @@ public class AnimalControllerTest {
 
     @Test
     public void 유기동물_조회_테스트(){
-        ResponseEntity<AnimalDto> animalRe = testRestTemplate.postForEntity("/meagea/animals/", map, AnimalDto.class);
+        ResponseEntity<AnimalDto> animalRe = testRestTemplate.postForEntity("/meagea/animals/", form, AnimalDto.class);
 
         String url = "/meagea/animals/" + animalRe.getBody().getNo();
         AnimalDto animal = testRestTemplate.getForEntity(url, AnimalDto.class).getBody();
