@@ -13,7 +13,7 @@ jobs:
         image: mysql:latest
         env:
           MYSQL_DATABASE: 'meagea'
-          MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
+          MYSQL_ROOT_PASSWORD: ${{ secrets.DB_PASSWORD }}
         ports:
           - 3305:3306
 

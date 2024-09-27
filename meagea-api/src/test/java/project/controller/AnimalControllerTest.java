@@ -19,7 +19,6 @@ import java.lang.reflect.Method;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@TestPropertySource(locations = "classpath:.env.properties")
 public class AnimalControllerTest {
 
     @Autowired
