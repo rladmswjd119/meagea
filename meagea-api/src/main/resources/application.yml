@@ -2,9 +2,6 @@ spring:
   application:
     name: meagea
 
-  config:
-    import: optional:file:.env[.properties]
-
   datasource:
     url: jdbc:mysql://localhost:3305/meagea
     username: root
