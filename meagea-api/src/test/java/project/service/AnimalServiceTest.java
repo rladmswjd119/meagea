@@ -34,7 +34,7 @@ public class AnimalServiceTest {
     public void setUp(){
         animalCap = ArgumentCaptor.forClass(Animal.class);
         form = new AnimalForm("뽀또", 5, "수컷", 3.5, true, "고양이",
-                "치즈", "공사장", 3, 4, 5, 5);
+                "공사장", 3, 4, 5, 5);
         animalService.addAnimal(form);
         verify(aniRepo).save(animalCap.capture());
     }

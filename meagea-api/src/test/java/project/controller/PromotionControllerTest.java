@@ -11,6 +11,7 @@ import org.springframework.http.*;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import project.dto.AnimalDto;
+import project.dto.AnimalForm;
 import project.dto.PromotionDetailDto;
 import project.dto.SimplePromotionDto;
 
@@ -28,20 +29,21 @@ public class PromotionControllerTest {
 
    @BeforeEach
     public void setUp(){
-        MultiValueMap<String, Object> animalMap = new LinkedMultiValueMap<>();
-        animalMap.add("name", "바보쥐");
-        animalMap.add("age", 5);
-        animalMap.add("gender", "암컷");
-        animalMap.add("weight", 3.5);
-        animalMap.add("neuter", true);
-        animalMap.add("kind", "친칠라");
-        animalMap.add("place", "동네");
-        animalMap.add("healthState", 2);
-        animalMap.add("activity", 1);
-        animalMap.add("sociality", 2);
-        animalMap.add("friendly", 1);
+       AnimalForm form = AnimalForm.builder()
+               .name("후드")
+               .age(4)
+               .gender("암컷")
+               .weight(3.5)
+               .neuter(true)
+               .kind("나몰빼미")
+               .place("블루베리 아카데미")
+               .healthState(2)
+               .activity(3)
+               .sociality(2)
+               .friendly(1)
+               .build();
         String animalUrl = "/meagea/animals/";
-        ResponseEntity<AnimalDto> animalRe = testRestTemplate.postForEntity(animalUrl, animalMap, AnimalDto.class);
+        ResponseEntity<AnimalDto> animalRe = testRestTemplate.postForEntity(animalUrl, form, AnimalDto.class);
 
         map = new LinkedMultiValueMap<>();
         map.add("title", "제목");
@@ -90,7 +92,7 @@ public class PromotionControllerTest {
                 new ParameterizedTypeReference<>() {});
         List<SimplePromotionDto> dtoList = responseEntity.getBody();
         for(int i = 0; i < dtoList.size(); i++) {
-            assertThat(dtoList.get(i).getName()).isEqualTo("바보쥐");
+            assertThat(dtoList.get(i).getName()).isEqualTo("후드");
         }
     }
 

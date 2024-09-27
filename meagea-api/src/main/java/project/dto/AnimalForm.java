@@ -1,15 +1,18 @@
 package project.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 public class AnimalForm {
-    public AnimalForm(String name, int age, String gender, double weight, boolean neuter, String kind, String detail, String place,
+    public AnimalForm(String name, int age, String gender, double weight, boolean neuter, String kind, String place,
                       int healthState, int activity, int sociality, int friendly) {
         this.name = name;
         this.age = age;
@@ -17,7 +20,6 @@ public class AnimalForm {
         this.weight = weight;
         this.neuter = neuter;
         this.kind = kind;
-        this.detail = detail;
         this.place = place;
         this.healthState = healthState;
         this.activity = activity;
@@ -32,7 +34,6 @@ public class AnimalForm {
     private double weight;
     private boolean neuter;
     private String kind;
-    private String detail;
     private String place;
     private int healthState;
     private int activity;

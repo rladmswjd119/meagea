@@ -1,5 +1,4 @@
-name: Java CI with Gradle
-
+name: Test CI
 on: push
 
 jobs:
@@ -13,7 +12,7 @@ jobs:
         image: mysql:latest
         env:
           MYSQL_DATABASE: 'meagea'
-          MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
+          MYSQL_ROOT_PASSWORD: ${{ secrets.DB_PASSWORD }}
         ports:
           - 3305:3306
 
@@ -33,4 +32,4 @@ jobs:
       - name: Build with Gradle Wrapper
         run: ./gradlew build
         env:
-          SPRING_DATASOURCE_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
+          SPRING_DATASOURCE_PASSWORD: ${{ secrets.DB_PASSWORD }}
